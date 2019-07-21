@@ -1,2 +1,2 @@
 # MAGNET
-MApping the Genetics of neuropsychological traits to the molecular NETwork 
+MApping the Genetics of neuropsychological traits to the molecular NETwork of human brain
