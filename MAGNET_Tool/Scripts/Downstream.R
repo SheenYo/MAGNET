@@ -61,7 +61,7 @@ packages2_2<-c("gtools","gplots","GO.db","Hmisc","illuminaio","impute","lattice"
 ##### install and laod or just load libraries
 
 require(devtools,lib.loc="./tmpRlib")
-install_github("ethanbahl/cerebroViz",lib.loc="./tmpRlib")
+install_github("ethanbahl/cerebroViz")
 require("igraph",lib.loc="./tmpRlib")
 require("WGCNA",lib.loc="./tmpRlib")
 require("annotate",lib.loc="./tmpRlib")
