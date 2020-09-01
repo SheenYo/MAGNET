@@ -43,7 +43,7 @@
 	wget ftp://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b150_GRCh37p13/BED/bed_chr_"$i".bed.gz
 	done
 	chmod 770 *
-	unzip -n bed_chr_*.bed.gz
+	gunzip -n bed_chr_*.bed.gz
 	cat bed_chr_*.bed>SNPs_all.bed
 	rm bed_chr_*
 
