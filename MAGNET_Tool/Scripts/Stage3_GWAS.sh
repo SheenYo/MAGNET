@@ -21,7 +21,7 @@ export phenofile
 export covars
 export fixed
 
-python <<END
+$PYTHON <<END
 import glob
 import os
 import optparse
@@ -150,7 +150,7 @@ magma --annotate window=$windowSize \
 #2-Gene set enrichment was performed in bataches chromosomewise and submitted to server
 
 
-python <<END
+$PYTHON <<END
 import glob
 import os
 import optparse
