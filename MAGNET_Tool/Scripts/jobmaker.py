@@ -1,6 +1,7 @@
 import glob
 import os
 import optparse
+from __future__ import print_function
 
 parser = optparse.OptionParser()
 parser.add_option("-f", "--factor", action="store", dest="fact", help="Factor X")
@@ -8,7 +9,7 @@ parser.add_option("-f", "--factor", action="store", dest="fact", help="Factor X"
 
 inputfiles = glob.glob("../Stage2_GenoImpute/Data_SNPfile*.raw")
 
-print len(inputfiles)
+print(len(inputfiles))
 
 
 i = 1
