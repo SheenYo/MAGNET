@@ -1270,7 +1270,7 @@ cd ../../Scripts
 echo -e ".....................................................................Preparing jobs for Pre-phasing \n................................................................."
 
 
-python << END
+$PYTHON << END
 import glob
 import os
 import optparse
@@ -1354,7 +1354,7 @@ echo -e ".....................................................................Pr
 
 cd ../../Scripts
 
-python minimac.py
+$PYTHON minimac.py
 wait
 chmod 770 *.sh
 echo -e "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- \n"
@@ -1694,7 +1694,7 @@ export phenofile
 export covars
 export fixed
 
-python <<END
+$PYTHON <<END
 import glob
 import os
 import optparse
@@ -1823,7 +1823,7 @@ magma --annotate window=$windowSize \
 #2-Gene set enrichment was performed in bataches chromosomewise and submitted to server
 
 
-python <<END
+$PYTHON <<END
 import glob
 import os
 import optparse
@@ -1938,8 +1938,8 @@ OutputF=$(pwd)"/Output/goelite_output/"
 InputF=$(pwd)"/Output/goelite_input/"
 DenomF=$(pwd)"/Output/goelite_denom/"
 
-python $GOelite --update Official --species $GOeliteSpecies --version EnsMart62Plus
-python $GOelite --species $GOeliteSpecies --input $InputF --denom $DenomF --output $OutputF 
+$PYTHON $GOelite --update Official --species $GOeliteSpecies --version EnsMart62Plus
+$PYTHON $GOelite --species $GOeliteSpecies --input $InputF --denom $DenomF --output $OutputF 
 
 
 
