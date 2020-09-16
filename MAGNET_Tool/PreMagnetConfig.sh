@@ -272,15 +272,15 @@ echo -e "...Checking for the Program MAGMA, if doesn't exist then it will be dow
 	#Change to magma main directory
 	cd $MAGNET/MAIN_DIR/magma
 	#Download magma
-	wget https://ctg.cncr.nl/software/MAGMA/prog/magma_v1.07b.zip --no-check-certificate
-	unzip magma_v1.07b.zip
-	chmod +xr $MAGNET/MAIN_DIR/magma/magma_v1.07b/magma
-	$MAGNET/MAIN_DIR/magma/magma_v1.07b/magma > $MAGNET/LOG/magma.log 2>&1 
-	testp='$MAGNET/MAIN_DIR/magma/magma_v1.07b/magma | grep 'magma''
+	wget https://ctg.cncr.nl/software/MAGMA/prog/magma_v1.07bb.zip --no-check-certificate
+	unzip magma_v1.07bb.zip
+	chmod +xr $MAGNET/MAIN_DIR/magma/magma
+	$MAGNET/MAIN_DIR/magma/magma > $MAGNET/LOG/magma.log 2>&1 
+	testp='$MAGNET/MAIN_DIR/magma/magma | grep -i 'magma''
 		if [[ ! $testp = 0 ]]
 		then
 		echo -e 			"\n ...Magma successfully installed... \n"
-		echo "magma=$MAGNET/MAIN_DIR/magma/magma_v1.07b/magma" >> $MAGNET/ConfigFiles/Tools.config
+		echo "magma=$MAGNET/MAIN_DIR/magma/magma_v1.07bb/magma" >> $MAGNET/ConfigFiles/Tools.config
 		else
 		echo "...Error during magma installation..."
 		tools_installed_ind=0
