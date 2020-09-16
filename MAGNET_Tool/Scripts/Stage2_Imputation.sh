@@ -6,7 +6,7 @@ source /$LocSource/ConfigFiles/Tools.config
 source /$LocSource/ConfigFiles/Thresholds.config
 
 
-cd OUTPUT_DIR/Stage1_GenoQC.sh 
+cd OUTPUT_DIR/Stage1_GenoQC 
 
 QCFile=FinalQC_Study #variable assigned to the final QC file from Stage1_GenoQC.sh
 
