@@ -1270,10 +1270,11 @@ cd ../../Scripts
 echo -e ".....................................................................Preparing jobs for Pre-phasing \n................................................................."
 
 
-python << END
+$PYTHON << END
 import glob
 import os
 import optparse
+from __future__ import print_function
 
 parser = optparse.OptionParser()
 parser.add_option("-f", "--factor", action="store", dest="fact", help="Factor X")
@@ -1281,7 +1282,7 @@ parser.add_option("-f", "--factor", action="store", dest="fact", help="Factor X"
 
 inputfiles = glob.glob("../OUTPUT_DIR/Stage2_GenoImpute/All_Affected_DataSNPs*.fam")
 
-print len(inputfiles)
+print(len(inputfiles))
 
 import sys
 sys.path.insert(0, '../ConfigFiles')
@@ -1353,7 +1354,7 @@ echo -e ".....................................................................Pr
 
 cd ../../Scripts
 
-python minimac.py
+$PYTHON minimac.py
 wait
 chmod 770 *.sh
 echo -e "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- \n"
@@ -1693,10 +1694,11 @@ export phenofile
 export covars
 export fixed
 
-python <<END
+$PYTHON <<END
 import glob
 import os
 import optparse
+from __future__ import print_function
 
 parser = optparse.OptionParser()
 parser.add_option("-f", "--factor", action="store", dest="fact", help="Factor X")
@@ -1704,7 +1706,7 @@ parser.add_option("-f", "--factor", action="store", dest="fact", help="Factor X"
 
 inputfiles = glob.glob("../Stage2_GenoImpute/Data_SNPfile*.raw")
 
-print len(inputfiles)
+print(len(inputfiles))
 
 pheno2=os.environ["pheno"]
 phenofile=os.environ["phenofile"]
@@ -1821,10 +1823,11 @@ magma --annotate window=$windowSize \
 #2-Gene set enrichment was performed in bataches chromosomewise and submitted to server
 
 
-python <<END
+$PYTHON <<END
 import glob
 import os
 import optparse
+from __future__ import print_function
 
 parser = optparse.OptionParser()
 parser.add_option("-f", "--factor", action="store", dest="fact", help="Factor X")
@@ -1832,7 +1835,7 @@ parser.add_option("-f", "--factor", action="store", dest="fact", help="Factor X"
 
 inputfiles = glob.glob("../Stage2_GenoImpute/Merged_FinalQC_SNPs_Data*.fam")
 
-print len(inputfiles)
+print(len(inputfiles))
 
 
 
@@ -1935,8 +1938,8 @@ OutputF=$(pwd)"/Output/goelite_output/"
 InputF=$(pwd)"/Output/goelite_input/"
 DenomF=$(pwd)"/Output/goelite_denom/"
 
-python $GOelite --update Official --species $GOeliteSpecies --version EnsMart62Plus
-python $GOelite --species $GOeliteSpecies --input $InputF --denom $DenomF --output $OutputF 
+$PYTHON $GOelite --update Official --species $GOeliteSpecies --version EnsMart62Plus
+$PYTHON $GOelite --species $GOeliteSpecies --input $InputF --denom $DenomF --output $OutputF 
 
 
 

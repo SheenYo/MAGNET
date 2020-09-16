@@ -454,10 +454,11 @@ cd ../../Scripts
 echo -e ".....................................................................Preparing jobs for Pre-phasing \n................................................................."
 
 
-python << END
+$PYTHON << END
 import glob
 import os
 import optparse
+from __future__ import print_function
 
 parser = optparse.OptionParser()
 parser.add_option("-f", "--factor", action="store", dest="fact", help="Factor X")
@@ -465,7 +466,7 @@ parser.add_option("-f", "--factor", action="store", dest="fact", help="Factor X"
 
 inputfiles = glob.glob("../OUTPUT_DIR/Stage2_GenoImpute/All_Affected_DataSNPs*.fam")
 
-print len(inputfiles)
+print(len(inputfiles))
 
 import sys
 sys.path.insert(0, '../ConfigFiles')
@@ -537,7 +538,7 @@ echo -e ".....................................................................Pr
 
 cd ../../Scripts
 
-python minimac.py
+$PYTHON minimac.py
 wait
 chmod 770 *.sh
 echo -e "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- \n"

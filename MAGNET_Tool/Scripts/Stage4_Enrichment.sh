@@ -40,8 +40,8 @@ OutputF=$(pwd)"/Output/goelite_output/"
 InputF=$(pwd)"/Output/goelite_input/"
 DenomF=$(pwd)"/Output/goelite_denom/"
 
-python $GOelite --update Official --species $GOeliteSpecies --version EnsMart62Plus
-python $GOelite --species $GOeliteSpecies --input $InputF --denom $DenomF --output $OutputF 
+$PYTHON $GOelite --update Official --species $GOeliteSpecies --version EnsMart62Plus
+$PYTHON $GOelite --species $GOeliteSpecies --input $InputF --denom $DenomF --output $OutputF 
 
 
 

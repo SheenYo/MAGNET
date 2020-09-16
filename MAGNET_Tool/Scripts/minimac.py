@@ -1,9 +1,10 @@
 import glob
 import os
+from __future__ import print_function
 
 inputfiles = glob.glob("../OUTPUT_DIR/Stage2_GenoImpute/All_Affected_DataSNPs*.fam")
 
-print len(inputfiles)
+print(len(inputfiles))
 
 i = 1
 for inputfile in inputfiles:

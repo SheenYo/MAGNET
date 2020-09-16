@@ -21,10 +21,11 @@ export phenofile
 export covars
 export fixed
 
-python <<END
+$PYTHON <<END
 import glob
 import os
 import optparse
+from __future__ import print_function
 
 parser = optparse.OptionParser()
 parser.add_option("-f", "--factor", action="store", dest="fact", help="Factor X")
@@ -32,7 +33,7 @@ parser.add_option("-f", "--factor", action="store", dest="fact", help="Factor X"
 
 inputfiles = glob.glob("../Stage2_GenoImpute/Data_SNPfile*.raw")
 
-print len(inputfiles)
+print(len(inputfiles))
 
 pheno2=os.environ["pheno"]
 phenofile=os.environ["phenofile"]
@@ -149,10 +150,11 @@ magma --annotate window=$windowSize \
 #2-Gene set enrichment was performed in bataches chromosomewise and submitted to server
 
 
-python <<END
+$PYTHON <<END
 import glob
 import os
 import optparse
+from __future__ import print_function
 
 parser = optparse.OptionParser()
 parser.add_option("-f", "--factor", action="store", dest="fact", help="Factor X")
@@ -160,7 +162,7 @@ parser.add_option("-f", "--factor", action="store", dest="fact", help="Factor X"
 
 inputfiles = glob.glob("../Stage2_GenoImpute/Merged_FinalQC_SNPs_Data*.fam")
 
-print len(inputfiles)
+print(len(inputfiles))
 
 
 

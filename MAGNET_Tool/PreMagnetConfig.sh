@@ -675,16 +675,20 @@ PYTHON=$(which python)
 echo "PYTHON=$PYTHON">> $MAGNET/ConfigFiles/Tools.config
 
 
-
 if [ !  -f $PYTHON ]
     then
     echo -e "............no PYTHON found $PYTHON............ \n"
     exit 1	
     else 
     echo -e "............Python found, dont panic :-D \n"
+
+    # Check for Python major version. The MAGNET pipeline expects Python2. I fixed some function calls to allow it to work with
+    #    Python3, but this is not fully tested, so we warn and suggest using Python2.
+    PYTHON3_STRING=$(python --version | fgrep 'Python 3')
+    if [ -n "$PYTHON3_STRING" ]; then 
+        echo "WARNING: your python interpreter '$PYTHON' is Python v3, which is untested with MAGNET. If you experience problems, set PYTHON to a python2 interpreter in 'Tools.config'."
+    fi
 fi
-wait
-sleep 1 
 
 echo -e '
 ##########
