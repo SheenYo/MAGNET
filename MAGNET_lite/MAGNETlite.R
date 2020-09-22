@@ -8,9 +8,12 @@ if(grepl("3.5|3.6",x[1])==FALSE) {# make an or with 3.4, 3.3, 3.2 and 3.1
   print(paste0(x,"is installed",collapse=" "))
 }
 
-
+Home=getwd()
 cat("Checking if all required packages are installed")
-source("RefData/mergewithorder.R")
+
+#SourceRmerge<-paste(Home,"/RefData/mergewithorder.R",sep="")
+
+source(paste(Home,'/RefData/mergewithorder.R',sep=""), local = TRUE)
 
 .libPaths(.libPaths())
 
@@ -24,7 +27,7 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
      install.packages(setdiff(package, rownames(installed.packages())),ask=FALSE)  
                                                                       }
  
-packages2_2<-c("shiny","WGCNA","annotate","org.Hs.eg.db","limma","scales","gplots")
+packages2_2<-c("shiny","methods","WGCNA","annotate","org.Hs.eg.db","limma","scales","gplots")
 if (length(setdiff(packages2_2, rownames(installed.packages()))) > 0) {
    BiocManager::install(setdiff(packages2_2, rownames(installed.packages())),site_repository="http://bioconductor.org/packages/3.9/bioc",ask=FALSE,dependencies=TRUE)
                                                                        } 
@@ -549,15 +552,16 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("pheno","Enrichmentplot.pdf", sep = '')},
       content = function(file){
         pdf(file)
-        source("../Scripts/EnrichmentModules.R",local=TRUE)
+        #source("../Scripts/EnrichmentModules.R",local=TRUE)
+        source(paste(Home,'/Scripts/EnrichmentModules.R',sep=""), local = TRUE)
       })
     
-    
+ 
     ###############################################################    Generate the Enrichment Plot  MOI 1   #################################################################            
     output$MOI1<- renderPlot ({
-      source('../Scripts/eachcall.R', local = TRUE)
+      source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
       Module=df$Module[df$Module=="Module 1"]
-      source('../Scripts/MOIgraph.R', local = TRUE)
+        source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
     },height = 1000, width = 1000) 
     
     
@@ -566,18 +570,18 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("pheno","Module1.pdf", sep = '')},
       content = function(file){
         pdf(file)
-        source('../Scripts/eachcall.R', local = TRUE)
+        source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
         Module=df$Module[df$Module=="Module 1"]
-        source('../Scripts/MOIgraph.R', local = TRUE)
+          source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
         #source("ModulePlot.R",local=TRUE)
         dev.off()
       })
     
     ###############################################################    Generate the Enrichment Plot  MOI 2   #################################################################            
     output$MOI2<- renderPlot ({
-      source('../Scripts/eachcall.R', local = TRUE)
+      source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
       Module=df$Module[df$Module=="Module 2"]
-      source('../Scripts/MOIgraph.R', local = TRUE)
+        source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
     },height = 1000, width = 1000) 
     
     
@@ -586,17 +590,17 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("pheno","Module2.pdf", sep = '')},
       content = function(file){
         pdf(file)
-        source('../Scripts/eachcall.R', local = TRUE)
+        source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
         Module=df$Module[df$Module=="Module 2"]
-        source('../Scripts/MOIgraph.R', local = TRUE)
+          source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
         #source("ModulePlot.R",local=TRUE)
         dev.off()
       })
     ###############################################################    Generate the Enrichment Plot  MOI 3   #################################################################            
     output$MOI3<- renderPlot ({
-      source('../Scripts/eachcall.R', local = TRUE)
+      source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
       Module=df$Module[df$Module=="Module 3"]
-      source('../Scripts/MOIgraph.R', local = TRUE)
+        source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
     },height = 1000, width = 1000) 
     
     
@@ -605,17 +609,17 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("pheno","Module3.pdf", sep = '')},
       content = function(file){
         pdf(file)
-        source('../Scripts/eachcall.R', local = TRUE)
+        source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
         Module=df$Module[df$Module=="Module 3"]
-        source('../Scripts/MOIgraph.R', local = TRUE)
+          source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
         #source("ModulePlot.R",local=TRUE)
         dev.off()
       })
     ###############################################################    Generate the Enrichment Plot  MOI 4   #################################################################            
     output$MOI4<- renderPlot ({
-      source('../Scripts/eachcall.R', local = TRUE)
+      source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
       Module=df$Module[df$Module=="Module 4"]
-      source('../Scripts/MOIgraph.R', local = TRUE)
+        source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
     },height = 1000, width = 1000) 
     
     
@@ -624,17 +628,17 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("pheno","Module4.pdf", sep = '')},
       content = function(file){
         pdf(file)
-        source('../Scripts/eachcall.R', local = TRUE)
+        source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
         Module=df$Module[df$Module=="Module 4"]
-        source('../Scripts/MOIgraph.R', local = TRUE)
+          source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
         #source("ModulePlot.R",local=TRUE)
         dev.off()
       })
     ###############################################################    Generate the Enrichment Plot  MOI 5   #################################################################            
     output$MOI5<- renderPlot ({
-      source('../Scripts/eachcall.R', local = TRUE)
+      source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
       Module=df$Module[df$Module=="Module 5"]
-      source('../Scripts/MOIgraph.R', local = TRUE)
+        source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
     },height = 1000, width = 1000) 
     
     
@@ -643,17 +647,17 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("pheno","Module5.pdf", sep = '')},
       content = function(file){
         pdf(file)
-        source('../Scripts/eachcall.R', local = TRUE)
+        source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
         Module=df$Module[df$Module=="Module 5"]
-        source('../Scripts/MOIgraph.R', local = TRUE)
+          source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
         #source("ModulePlot.R",local=TRUE)
         dev.off()
       })
     ###############################################################    Generate the Enrichment Plot  MOI 6   #################################################################            
     output$MOI6<- renderPlot ({
-      source('../Scripts/eachcall.R', local = TRUE)
+      source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
       Module=df$Module[df$Module=="Module 6"]
-      source('../Scripts/MOIgraph.R', local = TRUE)
+        source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
     },height = 1000, width = 1000) 
     
     
@@ -662,17 +666,17 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("pheno","Module6.pdf", sep = '')},
       content = function(file){
         pdf(file)
-        source('../Scripts/eachcall.R', local = TRUE)
+        source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
         Module=df$Module[df$Module=="Module 6"]
-        source('../Scripts/MOIgraph.R', local = TRUE)
+          source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
         #source("ModulePlot.R",local=TRUE)
         dev.off()
       })
     ###############################################################    Generate the Enrichment Plot  MOI 7   #################################################################            
     output$MOI7<- renderPlot ({
-      source('../Scripts/eachcall.R', local = TRUE)
+      source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
       Module=df$Module[df$Module=="Module 7"]
-      source('../Scripts/MOIgraph.R', local = TRUE)
+        source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
     },height = 1000, width = 1000) 
     
     
@@ -681,17 +685,17 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("pheno","Module7.pdf", sep = '')},
       content = function(file){
         pdf(file)
-        source('../Scripts/eachcall.R', local = TRUE)
+          source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
         Module=df$Module[df$Module=="Module 7"]
-        source('../Scripts/MOIgraph.R', local = TRUE)
+          source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
         #source("ModulePlot.R",local=TRUE)
         dev.off()
       })
     ###############################################################    Generate the Enrichment Plot  MOI 8   #################################################################            
     output$MOI8<- renderPlot ({
-      source('../Scripts/eachcall.R', local = TRUE)
+        source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
       Module=df$Module[df$Module=="Module 8"]
-      source('../Scripts/MOIgraph.R', local = TRUE)
+        source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
     },height = 1000, width = 1000) 
     
     
@@ -700,17 +704,17 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("pheno","Module8.pdf", sep = '')},
       content = function(file){
         pdf(file)
-        source('../Scripts/eachcall.R', local = TRUE)
+          source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
         Module=df$Module[df$Module=="Module 8"]
-        source('../Scripts/MOIgraph.R', local = TRUE)
+          source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
         #source("ModulePlot.R",local=TRUE)
         dev.off()
       })
     ###############################################################    Generate the Enrichment Plot  MOI 9   #################################################################            
     output$MOI9<- renderPlot ({
-      source('../Scripts/eachcall.R', local = TRUE)
+        source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
       Module=df$Module[df$Module=="Module 9"]
-      source('../Scripts/MOIgraph.R', local = TRUE)
+        source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
     },height = 1000, width = 1000) 
     
     
@@ -719,17 +723,17 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("pheno","Module9.pdf", sep = '')},
       content = function(file){
         pdf(file)
-        source('../Scripts/eachcall.R', local = TRUE)
+          source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
         Module=df$Module[df$Module=="Module 9"]
-        source('../Scripts/MOIgraph.R', local = TRUE)
+          source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
         #source("ModulePlot.R",local=TRUE)
         dev.off()
       })
     ###############################################################    Generate the Enrichment Plot  MOI 10   #################################################################            
     output$MOI10<- renderPlot ({
-      source('../Scripts/eachcall.R', local = TRUE)
+        source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
       Module=df$Module[df$Module=="Module 10"]
-      source('../Scripts/MOIgraph.R', local = TRUE)
+        source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
     },height = 1000, width = 1000) 
     
     
@@ -738,17 +742,17 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("pheno","Module10.pdf", sep = '')},
       content = function(file){
         pdf(file)
-        source('../Scripts/eachcall.R', local = TRUE)
+          source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
         Module=df$Module[df$Module=="Module 10"]
-        source('../Scripts/MOIgraph.R', local = TRUE)
+          source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
         #source("ModulePlot.R",local=TRUE)
         dev.off()
       })
     ###############################################################    Generate the Enrichment Plot  MOI 11   #################################################################            
     output$MOI11<- renderPlot ({
-      source('../Scripts/eachcall.R', local = TRUE)
+        source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
       Module=df$Module[df$Module=="Module 11"]
-      source('../Scripts/MOIgraph.R', local = TRUE)
+        source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
     },height = 1000, width = 1000) 
     
     
@@ -757,17 +761,17 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("pheno","Module11.pdf", sep = '')},
       content = function(file){
         pdf(file)
-        source('../Scripts/eachcall.R', local = TRUE)
+          source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
         Module=df$Module[df$Module=="Module 11"]
-        source('../Scripts/MOIgraph.R', local = TRUE)
+          source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
         #source("ModulePlot.R",local=TRUE)
         dev.off()
       })
     ###############################################################    Generate the Enrichment Plot  MOI 12   #################################################################            
     output$MOI12<- renderPlot ({
-      source('../Scripts/eachcall.R', local = TRUE)
+        source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
       Module=df$Module[df$Module=="Module 12"]
-      source('../Scripts/MOIgraph.R', local = TRUE)
+        source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
     },height = 1000, width = 1000) 
     
     
@@ -776,17 +780,17 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("pheno","Module12.pdf", sep = '')},
       content = function(file){
         pdf(file)
-        source('../Scripts/eachcall.R', local = TRUE)
+          source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
         Module=df$Module[df$Module=="Module 12"]
-        source('../Scripts/MOIgraph.R', local = TRUE)
+          source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
         #source("ModulePlot.R",local=TRUE)
         dev.off()
       })
     ###############################################################    Generate the Enrichment Plot  MOI 13   #################################################################            
     output$MOI13<- renderPlot ({
-      source('../Scripts/eachcall.R', local = TRUE)
+        source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
       Module=df$Module[df$Module=="Module 13"]
-      source('../Scripts/MOIgraph.R', local = TRUE)
+        source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
     },height = 1000, width = 1000) 
     
     
@@ -795,17 +799,17 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("pheno","Module13.pdf", sep = '')},
       content = function(file){
         pdf(file)
-        source('../Scripts/eachcall.R', local = TRUE)
+          source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
         Module=df$Module[df$Module=="Module 13"]
-        source('../Scripts/MOIgraph.R', local = TRUE)
+          source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
         #source("ModulePlot.R",local=TRUE)
         dev.off()
       })
     ###############################################################    Generate the Enrichment Plot  MOI 14   #################################################################            
     output$MOI14<- renderPlot ({
-      source('../Scripts/eachcall.R', local = TRUE)
+        source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
       Module=df$Module[df$Module=="Module 14"]
-      source('../Scripts/MOIgraph.R', local = TRUE)
+        source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
     },height = 1000, width = 1000) 
     
     
@@ -814,17 +818,17 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("pheno","Module14.pdf", sep = '')},
       content = function(file){
         pdf(file)
-        source('../Scripts/eachcall.R', local = TRUE)
+          source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
         Module=df$Module[df$Module=="Module 14"]
-        source('../Scripts/MOIgraph.R', local = TRUE)
+          source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
         #source("ModulePlot.R",local=TRUE)
         dev.off()
       })
     ###############################################################    Generate the Enrichment Plot  MOI 15   #################################################################            
     output$MOI15<- renderPlot ({
-      source('../Scripts/eachcall.R', local = TRUE)
+        source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
       Module=df$Module[df$Module=="Module 15"]
-      source('../Scripts/MOIgraph.R', local = TRUE)
+        source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
     },height = 1000, width = 1000) 
     
     
@@ -833,17 +837,17 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("pheno","Module15.pdf", sep = '')},
       content = function(file){
         pdf(file)
-        source('../Scripts/eachcall.R', local = TRUE)
+          source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
         Module=df$Module[df$Module=="Module 15"]
-        source('../Scripts/MOIgraph.R', local = TRUE)
+          source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
         #source("ModulePlot.R",local=TRUE)
         dev.off()
       })
     ###############################################################    Generate the Enrichment Plot  MOI 16   #################################################################            
     output$MOI16<- renderPlot ({
-      source('../Scripts/eachcall.R', local = TRUE)
+        source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
       Module=df$Module[df$Module=="Module 16"]
-      source('../Scripts/MOIgraph.R', local = TRUE)
+        source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
     },height = 1000, width = 1000) 
     
     
@@ -852,17 +856,17 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("pheno","Module16.pdf", sep = '')},
       content = function(file){
         pdf(file)
-        source('../Scripts/eachcall.R', local = TRUE)
+          source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
         Module=df$Module[df$Module=="Module 16"]
-        source('../Scripts/MOIgraph.R', local = TRUE)
+          source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
         #source("ModulePlot.R",local=TRUE)
         dev.off()
       })
     ###############################################################    Generate the Enrichment Plot  MOI 17   #################################################################            
     output$MOI17<- renderPlot ({
-      source('../Scripts/eachcall.R', local = TRUE)
+        source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
       Module=df$Module[df$Module=="Module 17"]
-      source('../Scripts/MOIgraph.R', local = TRUE)
+        source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
     },height = 1000, width = 1000) 
     
     
@@ -871,17 +875,17 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("pheno","Module17.pdf", sep = '')},
       content = function(file){
         pdf(file)
-        source('../Scripts/eachcall.R', local = TRUE)
+          source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
         Module=df$Module[df$Module=="Module 17"]
-        source('../Scripts/MOIgraph.R', local = TRUE)
+          source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
         #source("ModulePlot.R",local=TRUE)
         dev.off()
       })
     ###############################################################    Generate the Enrichment Plot  MOI 18   #################################################################            
     output$MOI18<- renderPlot ({
-      source('../Scripts/eachcall.R', local = TRUE)
+        source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
       Module=df$Module[df$Module=="Module 18"]
-      source('../Scripts/MOIgraph.R', local = TRUE)
+        source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
     },height = 1000, width = 1000) 
     
     
@@ -890,17 +894,17 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("pheno","Module18.pdf", sep = '')},
       content = function(file){
         pdf(file)
-        source('../Scripts/eachcall.R', local = TRUE)
+          source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
         Module=df$Module[df$Module=="Module 18"]
-        source('../Scripts/MOIgraph.R', local = TRUE)
+          source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
         #source("ModulePlot.R",local=TRUE)
         dev.off()
       })
     ###############################################################    Generate the Enrichment Plot  MOI 19   #################################################################            
     output$MOI19<- renderPlot ({
-      source('../Scripts/eachcall.R', local = TRUE)
+        source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
       Module=df$Module[df$Module=="Module 19"]
-      source('../Scripts/MOIgraph.R', local = TRUE)
+        source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
     },height = 1000, width = 1000) 
     
     
@@ -909,17 +913,17 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("pheno","Module19.pdf", sep = '')},
       content = function(file){
         pdf(file)
-        source('../Scripts/eachcall.R', local = TRUE)
+          source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
         Module=df$Module[df$Module=="Module 19"]
-        source('../Scripts/MOIgraph.R', local = TRUE)
+          source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
         #source("ModulePlot.R",local=TRUE)
         dev.off()
       })
     ###############################################################    Generate the Enrichment Plot  MOI 20   #################################################################            
     output$MOI20<- renderPlot ({
-      source('../Scripts/eachcall.R', local = TRUE)
+        source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
       Module=df$Module[df$Module=="Module 20"]
-      source('../Scripts/MOIgraph.R', local = TRUE)
+        source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
     },height = 1000, width = 1000) 
     
     
@@ -928,17 +932,17 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("pheno","Module20.pdf", sep = '')},
       content = function(file){
         pdf(file)
-        source('../Scripts/eachcall.R', local = TRUE)
+          source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
         Module=df$Module[df$Module=="Module 20"]
-        source('../Scripts/MOIgraph.R', local = TRUE)
+          source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
         #source("ModulePlot.R",local=TRUE)
         dev.off()
       })
     ###############################################################    Generate the Enrichment Plot  MOI 21   #################################################################            
     output$MOI21<- renderPlot ({
-      source('../Scripts/eachcall.R', local = TRUE)
+        source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
       Module=df$Module[df$Module=="Module 21"]
-      source('../Scripts/MOIgraph.R', local = TRUE)
+        source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
     },height = 1000, width = 1000) 
     
     
@@ -947,17 +951,17 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("pheno","Module21.pdf", sep = '')},
       content = function(file){
         pdf(file)
-        source('../Scripts/eachcall.R', local = TRUE)
+          source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
         Module=df$Module[df$Module=="Module 21"]
-        source('../Scripts/MOIgraph.R', local = TRUE)
+          source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
         #source("ModulePlot.R",local=TRUE)
         dev.off()
       })
     ###############################################################    Generate the Enrichment Plot  MOI 22   #################################################################            
     output$MOI22<- renderPlot ({
-      source('../Scripts/eachcall.R', local = TRUE)
+        source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
       Module=df$Module[df$Module=="Module 22"]
-      source('../Scripts/MOIgraph.R', local = TRUE)
+        source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
     },height = 1000, width = 1000) 
     
     
@@ -966,17 +970,17 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("pheno","Module22.pdf", sep = '')},
       content = function(file){
         pdf(file)
-        source('../Scripts/eachcall.R', local = TRUE)
+          source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
         Module=df$Module[df$Module=="Module 22"]
-        source('../Scripts/MOIgraph.R', local = TRUE)
+          source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
         #source("ModulePlot.R",local=TRUE)
         dev.off()
       })
     ###############################################################    Generate the Enrichment Plot  MOI 23   #################################################################            
     output$MOI23<- renderPlot ({
-      source('../Scripts/eachcall.R', local = TRUE)
+        source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
       Module=df$Module[df$Module=="Module 23"]
-      source('../Scripts/MOIgraph.R', local = TRUE)
+        source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
     },height = 1000, width = 1000) 
     
     
@@ -985,17 +989,17 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("pheno","Module23.pdf", sep = '')},
       content = function(file){
         pdf(file)
-        source('../Scripts/eachcall.R', local = TRUE)
+          source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
         Module=df$Module[df$Module=="Module 23"]
-        source('../Scripts/MOIgraph.R', local = TRUE)
+          source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
         #source("ModulePlot.R",local=TRUE)
         dev.off()
       })
     ###############################################################    Generate the Enrichment Plot  MOI 24   #################################################################            
     output$MOI24<- renderPlot ({
-      source('../Scripts/eachcall.R', local = TRUE)
+        source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
       Module=df$Module[df$Module=="Module 24"]
-      source('../Scripts/MOIgraph.R', local = TRUE)
+        source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
     },height = 1000, width = 1000) 
     
     
@@ -1004,17 +1008,17 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("pheno","Module24.pdf", sep = '')},
       content = function(file){
         pdf(file)
-        source('../Scripts/eachcall.R', local = TRUE)
+          source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
         Module=df$Module[df$Module=="Module 24"]
-        source('../Scripts/MOIgraph.R', local = TRUE)
+          source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
         #source("ModulePlot.R",local=TRUE)
         dev.off()
       })
     ###############################################################    Generate the Enrichment Plot  MOI 25   #################################################################            
     output$MOI25<- renderPlot ({
-      source('../Scripts/eachcall.R', local = TRUE)
+        source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
       Module=df$Module[df$Module=="Module 25"]
-      source('../Scripts/MOIgraph.R', local = TRUE)
+        source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
     },height = 1000, width = 1000) 
     
     
@@ -1023,17 +1027,17 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("pheno","Module25.pdf", sep = '')},
       content = function(file){
         pdf(file)
-        source('../Scripts/eachcall.R', local = TRUE)
+          source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
         Module=df$Module[df$Module=="Module 25"]
-        source('../Scripts/MOIgraph.R', local = TRUE)
+          source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
         #source("ModulePlot.R",local=TRUE)
         dev.off()
       })
     ###############################################################    Generate the Enrichment Plot  MOI 26   #################################################################            
     output$MOI26<- renderPlot ({
-      source('../Scripts/eachcall.R', local = TRUE)
+        source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
       Module=df$Module[df$Module=="Module 26"]
-      source('../Scripts/MOIgraph.R', local = TRUE)
+        source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
     },height = 1000, width = 1000) 
     
     
@@ -1042,17 +1046,17 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("pheno","Module26.pdf", sep = '')},
       content = function(file){
         pdf(file)
-        source('../Scripts/eachcall.R', local = TRUE)
+          source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
         Module=df$Module[df$Module=="Module 26"]
-        source('../Scripts/MOIgraph.R', local = TRUE)
+          source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
         #source("ModulePlot.R",local=TRUE)
         dev.off()
       })
     ###############################################################    Generate the Enrichment Plot  MOI 27   #################################################################            
     output$MOI27<- renderPlot ({
-      source('../Scripts/eachcall.R', local = TRUE)
+        source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
       Module=df$Module[df$Module=="Module 27"]
-      source('../Scripts/MOIgraph.R', local = TRUE)
+        source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
     },height = 1000, width = 1000) 
     
     
@@ -1061,17 +1065,17 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("pheno","Module27.pdf", sep = '')},
       content = function(file){
         pdf(file)
-        source('../Scripts/eachcall.R', local = TRUE)
+          source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
         Module=df$Module[df$Module=="Module 27"]
-        source('../Scripts/MOIgraph.R', local = TRUE)
+          source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
         #source("ModulePlot.R",local=TRUE)
         dev.off()
       })
     ###############################################################    Generate the Enrichment Plot  MOI 28   #################################################################            
     output$MOI28<- renderPlot ({
-      source('../Scripts/eachcall.R', local = TRUE)
+        source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
       Module=df$Module[df$Module=="Module 28"]
-      source('../Scripts/MOIgraph.R', local = TRUE)
+        source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
     },height = 1000, width = 1000) 
     
     
@@ -1080,17 +1084,17 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("pheno","Module28.pdf", sep = '')},
       content = function(file){
         pdf(file)
-        source('../Scripts/eachcall.R', local = TRUE)
+          source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
         Module=df$Module[df$Module=="Module 28"]
-        source('../Scripts/MOIgraph.R', local = TRUE)
+          source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
         #source("ModulePlot.R",local=TRUE)
         dev.off()
       })
     ###############################################################    Generate the Enrichment Plot  MOI 29   #################################################################            
     output$MOI29<- renderPlot ({
-      source('../Scripts/eachcall.R', local = TRUE)
+        source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
       Module=df$Module[df$Module=="Module 29"]
-      source('../Scripts/MOIgraph.R', local = TRUE)
+        source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
     },height = 1000, width = 1000) 
     
     
@@ -1099,9 +1103,9 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("pheno","Module29.pdf", sep = '')},
       content = function(file){
         pdf(file)
-        source('../Scripts/eachcall.R', local = TRUE)
+          source(paste(Home,'/Scripts/eachcall.R',sep=""), local = TRUE)
         Module=df$Module[df$Module=="Module 29"]
-        source('../Scripts/MOIgraph.R', local = TRUE)
+          source(paste(Home,'/Scripts/MOIgraph.R',sep=""), local = TRUE)
         #source("ModulePlot.R",local=TRUE)
         dev.off()
       })
@@ -1111,11 +1115,10 @@ server <- function(input, output, session) { # added session for updateSelectInp
     
     ##########################################################################################################################################################################################################
     Heatmaps<- reactive({
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+      source("../Scripts/eachcall.R",local=TRUE)
       Module=df$Module[df$Module=="Module 1"]
-      #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+      source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+      source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
     })
     
     output$Heatmap1<- renderPlot({
@@ -1127,20 +1130,18 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("Brain","Module1Heatmap.pdf", sep = '_')},
       content = function(file){
         pdf(file)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+        source("../Scripts/eachcall.R",local=TRUE)
         Module=df$Module[df$Module=="Module 1"]
-        #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+        source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+        source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
         dev.off()
       })
     ############################################ Module ##############################################################  
     Heatmaps2<- reactive({
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+      source("../Scripts/eachcall.R",local=TRUE)
       Module=df$Module[df$Module=="Module 2"]
-      #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+      source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+      source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
     })
     
     output$Heatmap2<- renderPlot({
@@ -1152,20 +1153,18 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("Brain","Module2Heatmap.pdf", sep = '_')},
       content = function(file){
         pdf(file)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+        source("../Scripts/eachcall.R",local=TRUE)
         Module=df$Module[df$Module=="Module 2"]
-        #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+        source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+        source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
         dev.off()
       })
     ############################################ Module ##############################################################
     Heatmaps3<- reactive({
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+      source("../Scripts/eachcall.R",local=TRUE)
       Module=df$Module[df$Module=="Module 3"]
-      #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+      source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+      source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
     })
     
     output$Heatmap3<- renderPlot({
@@ -1177,20 +1176,18 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("Brain","Module3Heatmap.pdf", sep = '_')},
       content = function(file){
         pdf(file)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+        source("../Scripts/eachcall.R",local=TRUE)
         Module=df$Module[df$Module=="Module 3"]
-        #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+        source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+        source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
         dev.off()
       })
     ############################################ Module ##############################################################  
     Heatmaps4<- reactive({
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+      source("../Scripts/eachcall.R",local=TRUE)
       Module=df$Module[df$Module=="Module 4"]
-      #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+      source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+      source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
     })
     
     output$Heatmap4<- renderPlot({
@@ -1202,20 +1199,18 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("Brain","Module4Heatmap.pdf", sep = '_')},
       content = function(file){
         pdf(file)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+        source("../Scripts/eachcall.R",local=TRUE)
         Module=df$Module[df$Module=="Module 4"]
-        #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+        source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+        source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
         dev.off()
       })
     ############################################ Module ##############################################################  
     Heatmaps5<- reactive({
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+      source("../Scripts/eachcall.R",local=TRUE)
       Module=df$Module[df$Module=="Module 5"]
-      #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+      source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+      source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
     })
     
     output$Heatmap5<- renderPlot({
@@ -1227,20 +1222,20 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("Brain","Module5Heatmap.pdf", sep = '_')},
       content = function(file){
         pdf(file)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+        source("../Scripts/eachcall.R",local=TRUE)
         Module=df$Module[df$Module=="Module 5"]
-        #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+      
+       source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+       source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
         dev.off()
       })
     ############################################ Module ##############################################################  
     Heatmaps6<- reactive({
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+      source("../Scripts/eachcall.R",local=TRUE)
       Module=df$Module[df$Module=="Module 6"]
-      #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+    
+     source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+     source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
     })
     
     output$Heatmap6<- renderPlot({
@@ -1252,20 +1247,20 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("Brain","Module6Heatmap.pdf", sep = '_')},
       content = function(file){
         pdf(file)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+        source("../Scripts/eachcall.R",local=TRUE)
         Module=df$Module[df$Module=="Module 6"]
-        #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+      
+       source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+       source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
         dev.off()
       })
     ############################################ Module ##############################################################  
     Heatmaps7<- reactive({
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+      source("../Scripts/eachcall.R",local=TRUE)
       Module=df$Module[df$Module=="Module 7"]
-      #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+    
+     source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+     source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
     })
     
     output$Heatmap7<- renderPlot({
@@ -1277,20 +1272,20 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("Brain","Module7Heatmap.pdf", sep = '_')},
       content = function(file){
         pdf(file)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+        source("../Scripts/eachcall.R",local=TRUE)
         Module=df$Module[df$Module=="Module 7"]
-        #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+      
+       source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+       source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
         dev.off()
       })
     ############################################ Module ##############################################################  
     Heatmaps8<- reactive({
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+      source("../Scripts/eachcall.R",local=TRUE)
       Module=df$Module[df$Module=="Module 8"]
-      #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+    
+     source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+     source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
     })
     
     output$Heatmap8<- renderPlot({
@@ -1302,20 +1297,20 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("Brain","Module8Heatmap.pdf", sep = '_')},
       content = function(file){
         pdf(file)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+        source("../Scripts/eachcall.R",local=TRUE)
         Module=df$Module[df$Module=="Module 8"]
-        #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+      
+       source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+       source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
         dev.off()
       })
     ############################################ Module ##############################################################  
     Heatmaps9<- reactive({
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+      source("../Scripts/eachcall.R",local=TRUE)
       Module=df$Module[df$Module=="Module 9"]
-      #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+    
+     source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+     source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
     })
     
     output$Heatmap9<- renderPlot({
@@ -1327,20 +1322,20 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("Brain","Module9Heatmap.pdf", sep = '_')},
       content = function(file){
         pdf(file)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+        source("../Scripts/eachcall.R",local=TRUE)
         Module=df$Module[df$Module=="Module 9"]
-        #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+      
+       source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+       source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
         dev.off()
       })
     ############################################ Module ##############################################################  
     Heatmaps10<- reactive({
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+      source("../Scripts/eachcall.R",local=TRUE)
       Module=df$Module[df$Module=="Module 10"]
-      #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+    
+     source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+     source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
     })
     
     output$Heatmap10<- renderPlot({
@@ -1352,20 +1347,20 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("Brain","Module10Heatmap.pdf", sep = '_')},
       content = function(file){
         pdf(file)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+        source("../Scripts/eachcall.R",local=TRUE)
         Module=df$Module[df$Module=="Module 10"]
-        #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+      
+       source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+       source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
         dev.off()
       })
     ############################################ Module ##############################################################  
     Heatmaps11<- reactive({
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+      source("../Scripts/eachcall.R",local=TRUE)
       Module=df$Module[df$Module=="Module 11"]
-      #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+    
+     source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+     source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
     })
     
     output$Heatmap11<- renderPlot({
@@ -1377,20 +1372,20 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("Brain","Module11Heatmap.pdf", sep = '_')},
       content = function(file){
         pdf(file)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+        source("../Scripts/eachcall.R",local=TRUE)
         Module=df$Module[df$Module=="Module 11"]
-        #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+      
+       source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+       source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
         dev.off()
       })
     ############################################ Module ##############################################################  
     Heatmaps12<- reactive({
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+      source("../Scripts/eachcall.R",local=TRUE)
       Module=df$Module[df$Module=="Module 12"]
-      #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+    
+     source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+     source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
     })
     
     output$Heatmap12<- renderPlot({
@@ -1402,20 +1397,20 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("Brain","Module12Heatmap.pdf", sep = '_')},
       content = function(file){
         pdf(file)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+        source("../Scripts/eachcall.R",local=TRUE)
         Module=df$Module[df$Module=="Module 12"]
-        #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+      
+       source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+       source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
         dev.off()
       })
     ############################################ Module ##############################################################  
     Heatmaps13<- reactive({
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+      source("../Scripts/eachcall.R",local=TRUE)
       Module=df$Module[df$Module=="Module 13"]
-      #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+    
+     source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+     source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
     })
     
     output$Heatmap13<- renderPlot({
@@ -1427,20 +1422,20 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("Brain","Module13Heatmap.pdf", sep = '_')},
       content = function(file){
         pdf(file)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+        source("../Scripts/eachcall.R",local=TRUE)
         Module=df$Module[df$Module=="Module 13"]
-        #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+      
+       source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+       source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
         dev.off()
       })
     ############################################ Module ##############################################################  
     Heatmaps14<- reactive({
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+      source("../Scripts/eachcall.R",local=TRUE)
       Module=df$Module[df$Module=="Module 14"]
-      #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+    
+     source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+     source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
     })
     
     output$Heatmap14<- renderPlot({
@@ -1452,20 +1447,20 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("Brain","Module14Heatmap.pdf", sep = '_')},
       content = function(file){
         pdf(file)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+        source("../Scripts/eachcall.R",local=TRUE)
         Module=df$Module[df$Module=="Module 14"]
-        #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+      
+       source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+       source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
         dev.off()
       })
     ############################################ Module ##############################################################  
     Heatmaps15<- reactive({
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+      source("../Scripts/eachcall.R",local=TRUE)
       Module=df$Module[df$Module=="Module 15"]
-      #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+    
+     source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+     source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
     })
     
     output$Heatmap15<- renderPlot({
@@ -1477,20 +1472,20 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("Brain","Module15Heatmap.pdf", sep = '_')},
       content = function(file){
         pdf(file)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+        source("../Scripts/eachcall.R",local=TRUE)
         Module=df$Module[df$Module=="Module 15"]
-        #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+      
+       source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+       source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
         dev.off()
       })
     ############################################ Module ##############################################################  
     Heatmaps16<- reactive({
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+      source("../Scripts/eachcall.R",local=TRUE)
       Module=df$Module[df$Module=="Module 16"]
-      #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+    
+     source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+     source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
     })
     
     output$Heatmap16<- renderPlot({
@@ -1502,20 +1497,20 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("Brain","Module16Heatmap.pdf", sep = '_')},
       content = function(file){
         pdf(file)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+        source("../Scripts/eachcall.R",local=TRUE)
         Module=df$Module[df$Module=="Module 16"]
-        #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+      
+       source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+       source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
         dev.off()
       })
     ############################################ Module ##############################################################  
     Heatmaps17<- reactive({
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+      source("../Scripts/eachcall.R",local=TRUE)
       Module=df$Module[df$Module=="Module 17"]
-      #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+    
+     source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+     source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
     })
     
     output$Heatmap17<- renderPlot({
@@ -1527,20 +1522,20 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("Brain","Module17Heatmap.pdf", sep = '_')},
       content = function(file){
         pdf(file)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+        source("../Scripts/eachcall.R",local=TRUE)
         Module=df$Module[df$Module=="Module 17"]
-        #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+      
+       source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+       source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
         dev.off()
       })
     ############################################ Module ##############################################################  
     Heatmaps18<- reactive({
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+      source("../Scripts/eachcall.R",local=TRUE)
       Module=df$Module[df$Module=="Module 18"]
-      #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+    
+     source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+     source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
     })
     
     output$Heatmap18<- renderPlot({
@@ -1552,20 +1547,20 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("Brain","Module18Heatmap.pdf", sep = '_')},
       content = function(file){
         pdf(file)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+        source("../Scripts/eachcall.R",local=TRUE)
         Module=df$Module[df$Module=="Module 18"]
-        #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+      
+       source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+       source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
         dev.off()
       })
     ############################################ Module ##############################################################  
     Heatmaps19<- reactive({
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+      source("../Scripts/eachcall.R",local=TRUE)
       Module=df$Module[df$Module=="Module 19"]
-      #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+    
+     source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+     source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
     })
     
     output$Heatmap19<- renderPlot({
@@ -1577,20 +1572,20 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("Brain","Module19Heatmap.pdf", sep = '_')},
       content = function(file){
         pdf(file)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+        source("../Scripts/eachcall.R",local=TRUE)
         Module=df$Module[df$Module=="Module 19"]
-        #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+      
+       source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+       source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
         dev.off()
       })
     ############################################ Module ##############################################################  
     Heatmaps20<- reactive({
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+      source("../Scripts/eachcall.R",local=TRUE)
       Module=df$Module[df$Module=="Module 20"]
-      #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+    
+     source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+     source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
     })
     
     output$Heatmap20<- renderPlot({
@@ -1602,20 +1597,20 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("Brain","Module20Heatmap.pdf", sep = '_')},
       content = function(file){
         pdf(file)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+        source("../Scripts/eachcall.R",local=TRUE)
         Module=df$Module[df$Module=="Module 20"]
-        #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+      
+       source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+       source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
         dev.off()
       })
     ############################################ Module ##############################################################  
     Heatmaps21<- reactive({
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+      source("../Scripts/eachcall.R",local=TRUE)
       Module=df$Module[df$Module=="Module 21"]
-      #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+    
+     source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+     source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
     })
     
     output$Heatmap21<- renderPlot({
@@ -1627,20 +1622,20 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("Brain","Module21Heatmap.pdf", sep = '_')},
       content = function(file){
         pdf(file)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+        source("../Scripts/eachcall.R",local=TRUE)
         Module=df$Module[df$Module=="Module 21"]
-        #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+      
+       source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+       source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
         dev.off()
       })
     ############################################ Module ##############################################################  
     Heatmaps22<- reactive({
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+      source("../Scripts/eachcall.R",local=TRUE)
       Module=df$Module[df$Module=="Module 22"]
-      #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+    
+     source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+     source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
     })
     
     output$Heatmap22<- renderPlot({
@@ -1652,20 +1647,20 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("Brain","Module22Heatmap.pdf", sep = '_')},
       content = function(file){
         pdf(file)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+        source("../Scripts/eachcall.R",local=TRUE)
         Module=df$Module[df$Module=="Module 22"]
-        #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+      
+       source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+       source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
         dev.off()
       })
     ############################################ Module ##############################################################  
     Heatmaps23<- reactive({
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+      source("../Scripts/eachcall.R",local=TRUE)
       Module=df$Module[df$Module=="Module 23"]
-      #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+    
+     source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+     source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
     })
     
     output$Heatmap23<- renderPlot({
@@ -1677,20 +1672,20 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("Brain","Module23Heatmap.pdf", sep = '_')},
       content = function(file){
         pdf(file)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+        source("../Scripts/eachcall.R",local=TRUE)
         Module=df$Module[df$Module=="Module 23"]
-        #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+      
+       source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+       source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
         dev.off()
       })
     ############################################ Module ##############################################################  
     Heatmaps24<- reactive({
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+      source("../Scripts/eachcall.R",local=TRUE)
       Module=df$Module[df$Module=="Module 24"]
-      #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+    
+     source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+     source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
     })
     
     output$Heatmap24<- renderPlot({
@@ -1702,20 +1697,20 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("Brain","Module24Heatmap.pdf", sep = '_')},
       content = function(file){
         pdf(file)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+        source("../Scripts/eachcall.R",local=TRUE)
         Module=df$Module[df$Module=="Module 24"]
-        #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+      
+       source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+       source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
         dev.off()
       })
     ############################################ Module ##############################################################  
     Heatmaps25<- reactive({
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+      source("../Scripts/eachcall.R",local=TRUE)
       Module=df$Module[df$Module=="Module 25"]
-      #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+    
+     source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+     source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
     })
     
     output$Heatmap25<- renderPlot({
@@ -1727,20 +1722,20 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("Brain","Module25Heatmap.pdf", sep = '_')},
       content = function(file){
         pdf(file)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+        source("../Scripts/eachcall.R",local=TRUE)
         Module=df$Module[df$Module=="Module 25"]
-        #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+      
+       source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+       source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
         dev.off()
       })
     ############################################ Module ##############################################################  
     Heatmaps26<- reactive({
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+      source("../Scripts/eachcall.R",local=TRUE)
       Module=df$Module[df$Module=="Module 26"]
-      #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+    
+     source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+     source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
     })
     
     output$Heatmap26<- renderPlot({
@@ -1752,20 +1747,20 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("Brain","Module26Heatmap.pdf", sep = '_')},
       content = function(file){
         pdf(file)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+        source("../Scripts/eachcall.R",local=TRUE)
         Module=df$Module[df$Module=="Module 26"]
-        #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+      
+       source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+       source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
         dev.off()
       })
     ############################################ Module ##############################################################  
     Heatmaps27<- reactive({
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+      source("../Scripts/eachcall.R",local=TRUE)
       Module=df$Module[df$Module=="Module 27"]
-      #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+    
+     source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+     source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
     })
     
     output$Heatmap27<- renderPlot({
@@ -1777,20 +1772,20 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("Brain","Module27Heatmap.pdf", sep = '_')},
       content = function(file){
         pdf(file)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+        source("../Scripts/eachcall.R",local=TRUE)
         Module=df$Module[df$Module=="Module 27"]
-        #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+      
+       source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+       source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
         dev.off()
       })
     ############################################ Module ##############################################################  
     Heatmaps28<- reactive({
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+      source("../Scripts/eachcall.R",local=TRUE)
       Module=df$Module[df$Module=="Module 28"]
-      #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+    
+     source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+     source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
     })
     
     output$Heatmap28<- renderPlot({
@@ -1802,20 +1797,20 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("Brain","Module28Heatmap.pdf", sep = '_')},
       content = function(file){
         pdf(file)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+        source("../Scripts/eachcall.R",local=TRUE)
         Module=df$Module[df$Module=="Module 28"]
-        #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+      
+       source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+       source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
         dev.off()
       })
     ############################################ Module ##############################################################  
     Heatmaps29<- reactive({
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+      source("../Scripts/eachcall.R",local=TRUE)
       Module=df$Module[df$Module=="Module 29"]
-      #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-      source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+    
+     source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+     source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
     })
     
     output$Heatmap29<- renderPlot({
@@ -1827,19 +1822,15 @@ server <- function(input, output, session) { # added session for updateSelectInp
         paste("Brain","Module29Heatmap.pdf", sep = '_')},
       content = function(file){
         pdf(file)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/eachcall.R",local=TRUE)
+        source("../Scripts/eachcall.R",local=TRUE)
         Module=df$Module[df$Module=="Module 29"]
-        #source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/MOIgraph.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/cerebroScale.R",local=TRUE)
-        source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/BrainModule.R",local=TRUE)
+      
+       source(paste(Home,'/Scripts/cerebroScale.R',sep=""), local = TRUE)
+       source(paste(Home,'/Scripts/BrainModule.R',sep=""), local = TRUE)
         dev.off()
       })
     #################################################################################################################################################################################################
-    # output$plot5<- renderPlot ({
-    #   source('../eachcall.R', local = TRUE)
-    #   Module=df$Module[df$Module=="Module 2"]
-    #   source('../MOIgraph.R', local = TRUE)
-    #                           }) 
+  
   }
 }
 shinyApp(ui, server)
