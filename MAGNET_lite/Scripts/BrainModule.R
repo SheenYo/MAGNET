@@ -37,7 +37,8 @@ sampleInfo$Age<-as.numeric(sampleInfo$Age)
 sampleInfo$period<-ifelse(sampleInfo$time=="pcw",sampleInfo$Age*7,ifelse(sampleInfo$time=="yrs",sampleInfo$Age*365+270,ifelse(sampleInfo$time=="mos",sampleInfo$Age*30+270,NA)))
 
 #We need it just for the donor names
-source("/home/afsheenyousaf/Desktop/ShinyApp_EnrichmentTesting/MAGNET/RefData/mergewithorder.R",local=TRUE)
+
+source(paste(Home,'/RefData/mergewithorder.R',sep=""), local = TRUE)
 PCA_matrix<-merge.with.order(PC1,sampleInfo,by.y="SampleID",by.x="donor_name",keep_order=1)
 
 #Select which have phenotype info present 
@@ -95,7 +96,6 @@ for (j in MS) {
   labvec[c(1,77,282,392,640,803,996)] <- c("1pcw","21pcw","Birth","1.3years","5.4years","13.6years","40.7years")
   
   
-  #pdf(paste0("Module",1,"Heatmap.pdf"), paper="a4r")
   toplot<-toplot[,1:998]
   date<-c(1:998)
   dateY<-paste0(round(date/365,2),"_Years")
@@ -117,6 +117,5 @@ for (j in MS) {
             #main=paste("Module",1),
             srtCol=90,tracecol = "none", cexRow = 1,
             add.expr=eval.parent(abline(v=282),axis(1,at=c(1,77,282,392,640,803,996),labels =FALSE)),cexCol = 1)
-  #print(Heaty)
-  #dev.off()
+ 
 }
