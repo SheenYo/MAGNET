@@ -5,6 +5,8 @@ LocSource=$(pwd)
 source /$LocSource/ConfigFiles/Tools.config
 source /$LocSource/ConfigFiles/Thresholds.config
 
+
+
 cd OUTPUT_DIR/Stage3_GWAS
 
 echo -e "
@@ -13,7 +15,6 @@ echo -e "
 #######################################
 "
 
-#cd .. /Stage3_GWAS
 chmod 770 ../Stage2_GenoImpute/Data_SNPfile*.raw
 
 export pheno
@@ -21,11 +22,10 @@ export phenofile
 export covars
 export fixed
 
-$PYTHON <<END
+python <<END
 import glob
 import os
 import optparse
-from __future__ import print_function
 
 parser = optparse.OptionParser()
 parser.add_option("-f", "--factor", action="store", dest="fact", help="Factor X")
@@ -33,7 +33,8 @@ parser.add_option("-f", "--factor", action="store", dest="fact", help="Factor X"
 
 inputfiles = glob.glob("../Stage2_GenoImpute/Data_SNPfile*.raw")
 
-print(len(inputfiles))
+print ( len(inputfiles) ) #For python 3
+#print  len(inputfiles) #For python 2
 
 pheno2=os.environ["pheno"]
 phenofile=os.environ["phenofile"]
@@ -56,39 +57,41 @@ chmod 770 job_*.sh
 njobs=$(ls -l ../Stage2_GenoImpute/Data_SNPfile*.raw|wc -l)
 
 
-for j in $(seq 12 12 $njobs); do
-    lower=$(expr "$j" - 11)
-    upper=$j    
-    
-    for i in $(seq $lower $upper); do 
-    ./job_"$i"_factor.sh > prg"$i".out  2>&1 &
+for j in $(seq 12 12 $njobs)
+	do
+	lower=$(expr "$j" - 11)
+	upper=$j
+for i in $(seq $lower $upper);do 
+	./job_"$i"_factor.sh > prg"$i".out  2>&1 &
 	sleep 1
-    done;
-    wait
-done;
+	done
+	wait
+done
 
 wait
-# final run
+
+# The remaining jobs
 
 remainder=$(expr $njobs % 12)
 lower=$(expr $njobs - $remainder)
-for i in $(seq $lower $njobs); do
-    ./job_"$i"_factor.sh > prg"$i".out  2>&1 &
-    sleep 1
-done;
+for i in $(seq $lower $njobs)
+	do
+	./job_"$i"_factor.sh > prg"$i".out  2>&1 &
+	sleep 1
+	done	
 wait
 
 echo -e "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- \n"
 
 echo -e "
 #######################################################################################
-# 				Post regression 				      #
+# 1)Post regression 				      				      #
 #######################################################################################
 "
 
 cat ResultsResults*> tmp.txt
 
-#header=$(head -1 tmp.txt)
+
 
 sed 's/\"//g' tmp.txt>tmp2.txt
 
@@ -102,7 +105,9 @@ awk {'print $1 "\t" $5'} tmp5.txt>SNP_Pvalue$pheno
 
 mv tmp5.txt RegressionOutput$pheno.txt
 
-ImputedData=../Stage2_GenoImpute/Merged_FinalQC_SNPs_Data
+#ImputedData=../Stage2_GenoImpute/Merged_FinalQC_SNPs_Data
+
+ImputedData=$SamplesToQC
 
 # To find which SNPs belong to which Chromosme, we merge the Regression output file with the final bim file
 # Merged_FinalQC_SNPs_DE.bim and statistical summary of Regression summary
@@ -130,11 +135,11 @@ pheno=$pheno
 R --no-save --slave --args $pheno $ColManhattan $snpsOfInterest < ../../../Scripts/Manhattanplot.R 
 
 
-
+echo -e "
 ######################################################################################
-# 14) Gene enrichment analysis(MAGMA)						     #
+#2) Gene enrichment analysis(MAGMA)						     #
 ######################################################################################
-
+"
 
 #For MAGMA annotation file is needed which can be generated using the reference genotype file
 
@@ -150,19 +155,18 @@ magma --annotate window=$windowSize \
 #2-Gene set enrichment was performed in bataches chromosomewise and submitted to server
 
 
-$PYTHON <<END
+python <<END
 import glob
 import os
 import optparse
-from __future__ import print_function
 
 parser = optparse.OptionParser()
 parser.add_option("-f", "--factor", action="store", dest="fact", help="Factor X")
 (options, args) = parser.parse_args()
 
-inputfiles = glob.glob("../Stage2_GenoImpute/Merged_FinalQC_SNPs_Data*.fam")
+#inputfiles = glob.glob("../Stage2_GenoImpute/Merged_FinalQC_SNPs_Data*.fam")
 
-print(len(inputfiles))
+#print len(inputfiles)
 
 
 
@@ -221,6 +225,5 @@ echo -e  "overal $Nsig genes passed permutation p-value treshold of $MagmaPERMP\
 echo -e  "File saved to $pheno.Significant.txt"
 
 cat $pheno.SignificantGenes.txt
-
 
 
