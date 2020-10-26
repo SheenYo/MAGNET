@@ -2,7 +2,7 @@
 ##### install and laod or just load libraries
 
 packagesBioC=c()
-packagesCRAN=c("lme4", "readxl")
+packagesCRAN=c("lme4", "readxl","data.table","qqman","lattice")
 
 pkgTest <- function(x)
   {
@@ -64,14 +64,16 @@ Geno_Pheno<-merge(Phenofile,rawdata,by.x ="ID_Genetik", by.y="IID")#732
 head(Geno_Pheno)
 dim(Geno_Pheno)
 
+colnames(Phenofile)[1]<-c("ID_Genetik")
 
-Geno_Pheno_Phenotype<-subset(Geno_Pheno,Geno_Pheno$PHENOTYPE==-9) 
+#Geno_Pheno_Phenotype<-subset(Geno_Pheno,Geno_Pheno$PHENOTYPE==-9) 
 
-dim(Geno_Pheno_Phenotype)
+#dim(Geno_Pheno_Phenotype)
 #Select only one individual per family
 
-Complete_PhenoGenoData<-Geno_Pheno_Phenotype[duplicated(Geno_Pheno_Phenotype$FID)==FALSE,] 
+#Complete_PhenoGenoData<-Geno_Pheno[duplicated(Geno_Pheno$FID)==FALSE,] 
 
+Complete_PhenoGenoData<-Geno_Pheno
 
 dim(Complete_PhenoGenoData)
 snps<-Complete_PhenoGenoData[,colnames(rawdata)[-c(1:6)]]
