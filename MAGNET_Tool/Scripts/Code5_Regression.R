@@ -2,7 +2,7 @@
 ##### install and laod or just load libraries
 
 packagesBioC=c()
-packagesCRAN=c("lme4", "readxl","data.table","qqman","lattice")
+packagesCRAN=c("lme4", "readxl")
 
 pkgTest <- function(x)
   {
@@ -53,27 +53,24 @@ gc(TRUE)
 
 rawdata<-read.table(args[1],sep=" ", header=T)
 
-#717 5006
 dim(rawdata)
-
+names(rawdata)
 Phenofile<-read.table(args[2],sep="\t",header=TRUE) #Regression gathered file
 dim(Phenofile)
 head(Phenofile)
 
-Geno_Pheno<-merge(Phenofile,rawdata,by.x ="ID_Genetik", by.y="IID")#732
-head(Geno_Pheno)
+Geno_Pheno<-merge(Phenofile,rawdata,by.x ="ID_Genetik", by.y="IID")
 dim(Geno_Pheno)
 
-colnames(Phenofile)[1]<-c("ID_Genetik")
 
-#Geno_Pheno_Phenotype<-subset(Geno_Pheno,Geno_Pheno$PHENOTYPE==-9) 
+Geno_Pheno_Phenotype<-subset(Geno_Pheno,Geno_Pheno$PHENOTYPE==-9) 
 
-#dim(Geno_Pheno_Phenotype)
+dim(Geno_Pheno_Phenotype)
+
 #Select only one individual per family
 
-#Complete_PhenoGenoData<-Geno_Pheno[duplicated(Geno_Pheno$FID)==FALSE,] 
+Complete_PhenoGenoData<-Geno_Pheno_Phenotype[duplicated(Geno_Pheno_Phenotype$FID.x)==FALSE,] 
 
-Complete_PhenoGenoData<-Geno_Pheno
 
 dim(Complete_PhenoGenoData)
 snps<-Complete_PhenoGenoData[,colnames(rawdata)[-c(1:6)]]
@@ -104,9 +101,9 @@ check.nlev.gtr.1 = "warning"))
 
 
 
-#########################
+########################################################
 ### run regression choose y (your phenotype of interest)
-#########################
+########################################################
 gc(TRUE)
 ## Regress over SNPS in apply function
 
