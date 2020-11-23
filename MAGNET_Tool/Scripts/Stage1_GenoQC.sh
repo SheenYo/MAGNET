@@ -74,7 +74,7 @@ AllelesInData2=($AllelesInData)
 
 if [[ $a == [a-z] ]]
 then
-echo "...Alleles will be converted to upper case"
+	echo "...Alleles will be converted to upper case"
 fi
 
 
@@ -175,15 +175,12 @@ cd $installationDir/OUTPUT_DIR/Stage1_GenoQC
 read ind filename <<< $(wc -l QC1.1.fam)
 read snps filename <<< $(wc -l QC1.1.bim)
 
-echo -e	'..............Further calculations will be done in output directory \n'
+echo -e "...Further calculations will be done in output directory \n"
 
 
 echo -e "...Your input file has" $ind  "samples and" $snps  "SNPs \n"
 
 sleep 2
-
-
-
 
 
 echo -e '
@@ -197,7 +194,7 @@ echo -e '
 ######################################################
 '
 
-echo -e	"...If no QC options provided default filtering criteria will be applied: \n Callrate>95% \n Genotyping-rate>95% \n MAF>0.02 \n HWE>10e-8 \n"
+echo -e "...If no QC options provided default filtering criteria will be applied: \n Callrate>95% \n Genotyping-rate>95% \n MAF>0.02 \n HWE>10e-8 \n"
 $PLINK --bfile QC1.1  --make-bed --out QC1.1
 
 echo -e '
@@ -207,7 +204,7 @@ echo -e '
 if [ -e QC1.1.bed ]
 then
 	$PLINK --bfile QC1.1  --geno $GENO --hwe $HWE --maf $MAF --make-bed --out tmp
-  sleep 1
+	sleep 1
 else
 	echo -e "No QC1.1 file exits, please check the file existence. Program exits \n"
 	exit
@@ -224,7 +221,7 @@ if [ -e tmp.bed ]
 then
 	echo -e	"...Checking rate of missingness per individual... \n"
 	$PLINK --bfile tmp --mind $MIND --make-bed --out QC1
-  sleep 1
+	sleep 1
 else
 	echo -e "No tmp file exits, please check the file existence. Program exits \n"
 	exit
@@ -241,7 +238,7 @@ sleep 1
 if [ -e QC1.irem ]
 then
 	read  irem filename <<< $(wc -l QC1.irem)
-  sleep 1
+	sleep 1
 else
 	irem=0
 fi
@@ -260,12 +257,12 @@ echo -e '
 '
 
 
-echo -e 		"...Report the missingness per SNP and individual wise...\n"
+echo -e "...Report the missingness per SNP and individual wise...\n"
 
 if [ -e QC1.bed ]
 then
 	$PLINK --bfile QC1 --missing --out QC1_report
-  sleep 1
+	sleep 1
 else
 	echo -e "No QC1 file exits, please check the file existence. Program exits \n"
 	exit
@@ -277,12 +274,12 @@ echo -e '
 ######################################################
 '
 
-echo -e  		"...Report the hardy weinberg distribution... \n"
+echo -e "...Report the hardy weinberg distribution...\n"
 
 if [ -e QC1.bed ]
 then
 	$PLINK --bfile QC1 --hardy --out PreQC_hardy
-  sleep 1
+	sleep 1
 else
 	echo -e "No QC1 file exits, please check the file existence. Program exits \n"
 	exit
@@ -301,7 +298,7 @@ echo -e "...Report the PreQC Allele Frequency... \n"
 if [ -e QC1.bed ]
 then
 	$PLINK --bfile QC1 --freq --out PreQC_AlleleFreq
-  sleep 1
+	sleep 1
 else
 	echo -e "No QC1 file exits, please check the file existence. Program exits \n"
 	exit
@@ -313,12 +310,12 @@ echo -e '
 ######################################################
 '
 
-echo -e 		"...Report the Inbreeding.. \n"
+echo -e "...Report the Inbreeding.. \n"
 
 if [ -e QC1.bed ]
 then
 	$PLINK --bfile QC1 --het --out PreQC_Inbreeding
-  sleep 1
+	sleep 1
 else
 	echo -e "No QC1 file exits, please check the file existence. Program exits \n"
 	exit
@@ -334,17 +331,17 @@ echo -e '
 
 echo -e '
 ######################################################
-#		Performing Sex check                             #
+#		Performing Sex check                  #
 ######################################################
 '
 
-echo -e 	'...checking for genderdiscrepancies... \n'
+echo -e '...checking for genderdiscrepancies... \n'
 
 
 if [ -e QC1.bed ]
 then
 	$PLINK --bfile QC1 --check-sex --out QC2_Sexcheck
-  sleep 2
+	sleep 2
 else
 	echo -e "No QC1 file exits, please check the file existence. Program exits \n"
 	exit
@@ -358,8 +355,8 @@ grep "PROBLEM" QC2_Sexcheck.sexcheck | awk '$3 != 0' > QC2_BadGender.txt
 read NAgend filename <<< $(wc -l QC2_NAGender.txt)
 read Badgend filename <<< $(wc -l QC2_BadGender.txt)
 
-echo -e ".....$NAgend samples had no gender annotated..... \n
-	 .....$Badgend samples had gender indiscrepancies..... \n"
+echo -e "...$NAgend samples had no gender annotated...\n
+	 ...$Badgend samples had gender indiscrepancies... \n"
 
 
 sleep 2
@@ -376,10 +373,10 @@ then
 	echo -e "
 	>>>> Your file has" $NAgend "unknown samples \n
 
-	>>>> Your data consists of samples without any gender annotated, if you wish to correct for them, please rerun the analysis 		after correcting them else analysis will continue with them \n"
+	>>>> Your data consists of samples without any gender annotated, if you wish to correct for them, please rerun the analysis after correcting them else analysis will continue with them \n"
 	#rename QC1 QC2 QC1.*;
 	mv QC1.bim QC2.bim
-  mv QC1.bed QC2.bed
+	mv QC1.bed QC2.bed
 	mv QC1.fam QC2.fam
 	echo -e ".....samples with unknown gender will not be considered further \n"
 	NAupdate=1
@@ -403,13 +400,11 @@ echo -e '
 
 if [ $Badgend -gt 0 ]
 then
-	echo -e '
-	     .....the following samples had gender discrepancies \n
-'
+	echo -e '...the following samples had gender discrepancies \n'
 	cat QC2_BadGender.txt
-sleep 2
+	sleep 2
 	echo -e "
-	>>>> Your data has" $Badgend "samples with gender inconsistencies, if you wish to correct for them, please rerun the 		analysis after correcting them \n
+	>>>> Your data has" $Badgend "samples with gender inconsistencies, if you wish to correct for them, please rerun the analysis after correcting them \n
 
 	>>>> As per default option, samples with gender inconsistencies will be removed \n"
 
@@ -418,12 +413,12 @@ sleep 2
 	echo -e ".....Samples with genderincongruencies being removed \n";
 
 	$PLINK --bfile QC2 --remove QC2_BadGender_removed.txt --make-bed --out QC3
-  sleep 2
+	sleep 2
 	if [ -e QC3.bim ]
 	then
-	echo -e "........$Badgend Samples with gender incongruencies were succesfully  removed \n";
+		echo -e "........$Badgend Samples with gender incongruencies were succesfully  removed \n";
 	else
-	echo -e ".....update of gender incongruencies failed pelase check plinkoutput_QC3.log \n";
+		echo -e ".....update of gender incongruencies failed pelase check plinkoutput_QC3.log \n";
 	fi
 
 else
@@ -439,14 +434,12 @@ echo -e '
 ######################################################
 '
 
-
-
 echo -e "...Final Sexcheck... \n"
 
 if [ -e QC3.bim ]
 then
 	$PLINK --bfile QC3 --check-sex --out QC4_Sexcheck
-  sleep 2
+	sleep 2
 else
 	echo -e "Please check the existence of QC3 files, else program exits \n"
 	exit
@@ -461,8 +454,6 @@ sleep 2
 echo -e '
 ######################################################
 '
-
-
 
 echo -e "...Report Missing Gender Handling: \n"
 
@@ -504,9 +495,9 @@ echo -e '
 
 
 echo -e '
-						####################################################
-						#	      Checking for inbreeding and contamination  #
-						####################################################
+######################################################
+#	Checking for inbreeding and contamination    #
+######################################################
 
 '
 
@@ -514,7 +505,7 @@ echo -e '
 if [ -e QC3.bim ]
 then
 	$PLINK --bfile QC3 --het --out Breeding_output
-  sleep 2
+	sleep 2
 else
 	echo -e "Please check the existence of QC3 files, else program exits \n"
 	exit
@@ -551,19 +542,14 @@ then
 	awk {'print $1 "\t" $2'} QC4_contaminatedIDs.txt > Contaminated_samples_removed.txt
 
 	$PLINK --bfile QC3 --remove Contaminated_samples_removed --make-bed --out QC4 >plinkoutput_QC4_rm_cont.txt
-  sleep 2
-
-echo -e '
-######################################################
-  '
-
+	sleep 2
 
 	echo -e ".....$samples succesfully removed, samples written to Contaminated_samples_removed.txt \n";
 else
 	echo -e ".....no sample/s needed to be removed due to contamination \n"
 	#rename QC3 QC4 QC3.*;
-  mv QC3.bim QC4.bim
-  mv QC3.bed QC4.bed
+	mv QC3.bim QC4.bim
+	mv QC3.bed QC4.bed
 	mv QC3.fam QC4.fam
 	echo -e "....QC4 passed \n"
 fi
@@ -584,12 +570,7 @@ then
 	awk {'print $1 " " $2'} QC4_inbredIDs.txt > Inbred_samples_removed.txt
 
 	$PLINK --bfile QC4 --remove Inbred_samples_removed.txt --make-bed --out QC5 > ../../LOG/Stage1_GenoQC/plinkoutput_QC5_rmInbred.log
-  sleep 2
-
-
-echo -e '
-######################################################
-  '
+	sleep 2
 
 	if [ -e QC5.bim ]
 	then
@@ -615,9 +596,9 @@ echo -e '
 
 
 echo -e "
-###########################################################
-#	         Checking for Mendel Errors
-############################################################
+#######################################################
+#	      Checking for Mendel Errors              #
+#######################################################
 "
 
 #parameter "Set-me missing" zero out specific Mendelian inconsistencies to be used in conjuction with me 1 1 so that no particular snp/individual is removed but to zero out specific genotypes
@@ -627,7 +608,7 @@ echo -e "...excluding families with more then 1% mendel errors and SNPs with mor
 if [ -e QC5.bim ]
 then
 	$PLINK --bfile QC5 --me $MEFam $MESNP --set-me-missing --make-bed --out QC6
-  sleep 2
+	sleep 2
 
 
 echo -e '
@@ -635,7 +616,7 @@ echo -e '
 '
 
 	$PLINK --bfile QC6 --mendel --out MendelsummaryQC6
-  sleep 2
+	sleep 2
 else
 	echo -e "Please check the existence of QC5 files, else program will exit \n"
 	exit
@@ -651,14 +632,14 @@ echo -e "...checking again for callrate>95% genotyping-rate>95%  MAF>0.02 hwe>10
 if [ -e QC6.bim ]
 then
 	$PLINK --bfile QC6  --geno $GENO --hwe $HWE --maf $MAF --make-bed --out tmp
-  sleep 2
+	sleep 2
 
 echo -e '
 ######################################################
 '
 
 	$PLINK --bfile tmp --mind $MIND --make-bed --out  QC7
-  sleep 2
+	sleep 2
 
 	read SNPs filename <<< $(wc -l QC7.bim)
 	snps=$(cat QC5.bim | wc -l)
@@ -701,9 +682,9 @@ wait
 
 
 echo -e "
-									#########################################################
-									#	  Calculating Identity by descent             	      #
-									#########################################################
+#########################################################
+#	  Calculating Identity by descent               #
+#########################################################
 "
 
 
@@ -719,19 +700,18 @@ fi
 echo -e '
 ######################################################
 '
-
-echo -e								"...Relatedness scores across all individuals are being calculated... \n"
+echo -e "...Relatedness scores across all individuals are being calculated... \n"
 wait
 
 if [ -e  QC8_Relcheck.genome ]
 then
-    echo -e 									"...Relcheck is succesfully finished.... \n"
+    echo -e "...Relcheck is succesfully finished.... \n"
 else
-    echo -e						 "...there were some major issues with your data. For details check QC8_Relcheck.log... \n"
+    echo -e "...there were some major issues with your data. For details check QC8_Relcheck.log... \n"
 fi
 sleep 2
 
-echo -e										"...IBD scores successfully calculated... \n"
+echo -e "...IBD scores successfully calculated... \n"
 
 awk '$9 >0.8 && $10 >0.8'  QC8_Relcheck.genome > QC8_Relcheck.duplicates
 
@@ -742,7 +722,7 @@ echo -e '
 
 read dups x <<< $(wc -l QC8_Relcheck.duplicates)
 
-echo -e 						    "...there are/is $dups duplicated sample/s. Samples written to QC8_Relcheck.duplicates \n..."
+echo -e "...there are/is $dups duplicated sample/s. Samples written to QC8_Relcheck.duplicates \n..."
 
 sleep 2
 ## Decisions on how to deal with families, user should provide additional files to correct the errors if any
@@ -752,7 +732,14 @@ echo ">>> One duplicated individual will be deleted"
 
 awk {'print $1 " " $2'} QC8_Relcheck.duplicates > QC8_duplicatesDeleted.txt;
 
-$PLINK --bfile QC8 --remove QC8_duplicatesDeleted.txt --make-bed --out QC9 > ../../LOG/Stage1_GenoQC/plinkoutput_QC8_rmDupls.log
+
+if [ ! -z $DuplicatedIds ]
+	then
+	Duplicates=$DuplicatedIds
+	else
+	Duplicates=QC8_duplicatesDeleted.txt
+	fi
+$PLINK --bfile QC8 --remove $Duplicates --make-bed --out QC9 > ../../LOG/Stage1_GenoQC/plinkoutput_QC8_rmDupls.log
 sleep 2
 
 echo -e '
@@ -762,7 +749,7 @@ echo -e '
 
 if [ -e QC9.bed ]
 then
-	echo -e "...$(cat QC8_Relcheck.duplicates| wc -l) Sample/s was/were deleted. Sample/s written to QC8_duplicatesDeleted.txt \n"
+	echo -e "...$(cat $Duplicates| wc -l) Sample/s was/were deleted. Sample/s written to QC8_duplicatesDeleted.txt \n"
 else
 	echo -e "...there were some issues with deleting duplicated samples, for more details please check plinkoutput_QC8.1_rmDupls.log \n"
 fi
@@ -778,7 +765,7 @@ mv QC8.fam QC9.fam
 
 sleep 2
 
-echo -e 								"...Checking for unrelated Parent offspring duos... \n"
+echo -e "...Checking for unrelated Parent offspring duos... \n"
 
 $PLINK --bfile QC9 --genome rel-check --out QC9_Relcheck > plinkoutput_QC9_PO_Relcheck
 sleep 2
@@ -800,20 +787,29 @@ echo -e '
 
 NnotPO=$(cat temp | wc -l);
 
-echo -e						"... there were $NnotPO not related parent offspring duos. Families are written to Not_related_fams.txt... \n"
+echo -e "... there were $NnotPO not related parent offspring duos. Families are written to Not_related_fams.txt... \n"
 wait
 
 echo -e ">>> Deleting families with discordant relation status..... \n"
 
 grep -f temp QC9.fam | awk '{print $1 " " $2}' > RmIndividuals_QC9.txt
 
-$PLINK --bfile QC9 --remove RmIndividuals_QC9.txt --make-bed --out QC9.1 > ../../LOG/Stage1_GenoQC/plinkoutput_QC9.1_rmNotPO.log
+
+if [ -e RmIndividuals_QC9.txt ]
+then
+	$PLINK --bfile QC9 --remove RmIndividuals_QC9.txt --make-bed --out QC10 > ../../LOG/Stage1_GenoQC/plinkoutput_QC9.1_rmNotPO.log
+else
+	mv QC9.bim QC10.bim
+	mv QC9.bed QC10.bed
+	mv QC9.fam QC10.fam
+	mv QC9.log QC10.log
+fi
 
 echo -e '
 ######################################################
 '
 
-if [ -e QC9.1.bed ]
+if [ -e QC10.bed ]
 then
 	echo -e ".....$NnotPO Samples were deleted. Samples written to RmIndividuals_QC9.txt \n"
 else
@@ -829,19 +825,13 @@ echo -e '
 ######################################################
 '
 
-mv QC9.bim QC10.bim
-mv QC9.bed QC10.bed
-mv QC9.fam QC10.fam;
-mv QC9.log QC10.log
-
-sleep 2
 
 echo -e "... calculating significance across families relations \n"
 
 if [ -e QC10.bed ]
 then
 	$PLINK --bfile QC10 --genome --out QC10_Relcheck > plinkoutput_QC10_Relcheckround2.txt
-  sleep 2
+	sleep 2
 else
 	echo -e "Please check the existence of QC10 files. Program exits \n"
 	exit
@@ -855,9 +845,9 @@ echo -e '
 
 if [ -e  QC10_Relcheck.genome ]
 then
-    echo -e		"....relcheck is succesfully finished.... \n"
+    echo -e "....relcheck is succesfully finished.... \n"
 else
-    echo -e		"...there were some major issues with your data. For details check plinkoutput_QC10_relcheck.log... \n"
+    echo -e "...there were some major issues with your data. For details check plinkoutput_QC10_relcheck.log... \n"
 fi
 wait
 
@@ -878,8 +868,6 @@ echo -e '
 ######################################################
 '
 
-
-
 echo -e ">>> You can check the output and rerun the analysis otherwise the program by default deleted one of the two families <<< \n"
 
 awk '{print $1}' CrossfamRelations.txt | sort -u > temp
@@ -888,7 +876,14 @@ fams=$(cat temp | wc -l)
 
 grep -f temp QC10.fam | awk '{print $1 " " $2}' > RmIndividuals_QC10.txt
 
-$PLINK --bfile QC10 --remove RmIndividuals_QC10.txt --make-bed --out QC11 > ../../LOG/Stage1_GenoQC/plinkoutput_QC11.1_rmRelFam.log
+if [ -e QC10.bed ]
+then
+	$PLINK --bfile QC10 --remove RmIndividuals_QC10.txt --make-bed --out QC11 > ../../LOG/Stage1_GenoQC/plinkoutput_QC11.1_rmRelFam.log
+else
+	mv QC10.bim QC11.bim
+	mv QC10.bed QC11.bed
+	mv QC10.fam QC11.fam
+fi
 
 if [ -e QC11.bed ]
 then
@@ -898,28 +893,26 @@ then
 	echo -e ".....there were some issues with deleting related families. For more details please check plinkoutput_QC8.1_rmNotPO.log"
 fi
 
-mv QC10.bim QC11.bim
-mv QC10.bed QC11.bed
-mv QC10.fam QC11.fam
+
 sleep 2
 
 echo -e "
-					#########################################################
-					#	 	 Performing Final QC                              	#
-					#########################################################
+#########################################################
+#	 	 Performing Final QC                    #
+#########################################################
 "
 
-echo -e				".......Perform final QC before proceeding to next stage of the program........  \n"
+echo -e ".......Perform final QC before proceeding to next stage of the program........  \n"
 
 
 
-echo -e				".......Checking again for callrate>95% genotyping-rate>95%  MAF>0.02 hwe>10e-8...... \n"
+echo -e ".......Checking again for callrate>95% genotyping-rate>95%  MAF>0.02 hwe>10e-8...... \n"
 
 
 if [ -e QC11.bed ]
 then
 	$PLINK --bfile QC11  --geno 0.05 --hwe 10e-8 --maf 0.02 --make-bed --out tmp12
-sleep 2
+	sleep 2
 
 echo -e '
 ######################################################
@@ -1004,21 +997,21 @@ fi
 sleep 2
 
 echo -e "
-					################################################
-					#					                                     #
-					# 	     MDS plots and IBD analysis            #
-					#                                              #
-					################################################
+#######################################################
+#							#
+# 	     MDS plots and IBD analysis		#
+#                                     		#
+#######################################################
 "
 
-echo -e	">>> Provide Path to HAP Map files (bim fam bed coded) for ethnicity check <<<< \n"
+echo -e ">>> Provide Path to HAP Map files (bim fam bed coded) for ethnicity check <<<< \n"
 
 hapmap=$Hapmapfile
 
 if [ ! -e $hapmap.fam ] || [ ! -e $hapmap.bim ] || [ ! -e $hapmap.bed ]
 then
 	echo -e "...$hapmap files do not exist, the program will exit. Please download the hapmap files from the link provided in the user manual and rerun the analysis again... \n"
-	exit;
+	exit
 else
 	echo -e "...$hapmap files found... \n"
 fi
@@ -1075,7 +1068,7 @@ awk '{print $2 " "  $1 }' localHM.bim > HM3CHR #Hapmap chromosomes
 awk '{print $2 " " $4}' localHM.bim > HM3pos #Hapmap SNP base-pair positions
 awk '{print $2 " " $3}' localHM.bim > HM3CM #Hapmap centi-morgan
 
-echo -e 		"...Updating map, chr and cm of the study data... \n"
+echo -e "...Updating map, chr and cm of the study data... \n"
 
 sleep 2
 
@@ -1092,7 +1085,7 @@ echo -e '
 '
 
 
-echo -e 		"...Updated SNP positions of the study data based on Hapmap data...  \n"
+echo -e "...Updated SNP positions of the study data based on Hapmap data...  \n"
 
 $PLINK --bfile localQCp  --update-map HM3CHR --update-chr --make-bed  --out localQCpc #updated SNP base-pair position and chromosome of the study data
 wait
@@ -1103,13 +1096,13 @@ echo -e '
 ######################################################
 '
 
-echo -e 		"...Updated CHR of the study data based on Hapmap data... \n"
+echo -e "...Updated CHR of the study data based on Hapmap data... \n"
 
 
 $PLINK --bfile localQCpc  --update-map HM3CM --update-cm --make-bed  --out localQCpcc #updated SNP base-pair position,chromosome and cm of the study data
 sleep 2
 
-echo -e 		"...Updating CM of the study data based on Hapmap data... \n"
+echo -e "...Updating CM of the study data based on Hapmap data... \n"
 
 echo -e '
 ######################################################
@@ -1185,7 +1178,7 @@ echo -e '
 ######################################################
   '
 
-    if [[ -e MDSfile2-merge.missnp ]]
+		if [[ -e MDSfile2-merge.missnp ]]
 		then
 		$PLINK --bfile internalf --exclude MDSfile2-merge.missnp --make-bed --out internalf
 echo -e '
@@ -1195,8 +1188,7 @@ echo -e '
 		$PLINK --bfile internalf --bmerge external.bed external.bim external.fam --make-bed --out MDSfile
 echo -e '
 ######################################################
-  '
-
+ '
 		fi
 	fi
 
@@ -1207,12 +1199,12 @@ $PLINK --bfile MDSfile --cluster --mind .05 --mds-plot 4 --out HM3mds #Create an
 sleep 2
 
 
-echo -e 				"...Generating all Pre and Post QC plots including MDS... \n"
+echo -e "...Generating all Pre and Post QC plots including MDS... \n"
 
 
 $R --slave --no-save --args QC1_report.lmiss QC1_report.imiss PreQC_hardy.hwe PreQC_AlleleFreq.frq QC2_Sexcheck.sexcheck PreQC_Inbreeding.het PostQC_report.lmiss PostQC_report.imiss PostQC_Hardyreport.hwe PostQC_AlleleFreq.frq Final_Sexcheck.sexcheck PostQC_Inbreeding.het SampleInds.txt $Siteinfo HM3mds.mds < ../../Scripts/GenerateQC_plots.R
 
-echo -e 				"...Stage 1 of Genotype QC is successfully completed... \n"
+echo -e "...Stage 1 of Genotype QC is successfully completed... \n"
 
 mv QC12.fam FinalQC_Study.fam
 mv QC12.bed FinalQC_Study.bed
