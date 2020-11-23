@@ -5,17 +5,22 @@ LocSource=$(pwd)
 source /$LocSource/ConfigFiles/Tools.config
 source /$LocSource/ConfigFiles/Thresholds.config
 
-echo before comment
-: <<'BLOCK'
-
 cd OUTPUT_DIR/Stage2_GenoImpute
 
-QCFile=../Stage1_GenoQC/FinalQC_Study #variable assigned to the final QC file from Stage1_GenoQC.sh
+#Check if the user performed MAGNET Stage1 or has provided a quality checked file
+
+if [ $PerformStage1=="No" ]
+then
+	echo -e "User provided quality checked file will be used \n"
+	QCFile=$QualityCheckedFile
+else
+	QCFile=../Stage1_GenoQC/FinalQC_Study #variable assigned to the final QC file from Stage1_GenoQC.sh
+fi
 
 
 echo -e "
 #####################################################
-# 1) Check if only autosomal chromosomes are present#
+# 1)Check if only autosomal chromosomes are present #
 #####################################################
 "
 
@@ -40,13 +45,11 @@ echo -e '
 ######################################################
 '
 
-
 $PLINK --bfile $QCFile --list-duplicate-vars ids-only suppress-first #List the duplicated SNPs 
 
 echo -e '
 ######################################################
 '
-
 
 $PLINK --bfile $QCFile --exclude plink.dupvar --make-bed --out QC_autosomal_for_StrandCheck #Delete the duplicated SNPs
 
@@ -60,14 +63,15 @@ $PLINK   --bfile QC_autosomal_for_StrandCheck --extract snp.txt --make-bed --out
 
 
 echo -e "
-#############################################################################################
-# 2) Perform liftOver, if genome build is other than hg19				    #
-#############################################################################################
+#########################################################
+# 2)Perform liftOver, if genome build is other than hg19#
+#########################################################
 "
 
 if [[ $LIFTOVER=="No" ]]
 then
 	echo -e "Your data is already in hg19 format \n"
+	
 else
 
 	echo -e							".........Updating the map positions of plink files....... \n"
@@ -82,12 +86,6 @@ else
 
 
 	echo ".....$(cat not_annotated.bim|wc -l) SNPs had unannotated positions"
-
-echo -e "
-######################################################################################################
-# 3) 		LIFTOVER									     #
-######################################################################################################
-"
 
 
 	echo -e "Preparing file for liftOver \n"    
@@ -115,9 +113,9 @@ echo -e "
 		$PLINK --bfile QC_automsomal_Updated --update-map Final_map --make-bed --out Data_liftedSNPs
 	else
 		echo "all SNPs mapped nothing to lift over or SNPs were already in hg19 annotation" 
-		cp QC_automsomal_Updated.bim  Data_liftedSNPs.bim
-		cp QC_automsomal_Updated.bed  Data_liftedSNPs.bed
-		cp QC_automsomal_Updated.fam  Data_liftedSNPs.fam
+		mv QC_automsomal_Updated.bim  QC_automsomal.bim
+		mv QC_automsomal_Updated.bed  QC_automsomal.bed
+		mv QC_automsomal_Updated.fam  QC_automsomal.fam
 		echo "ready for QC"
 	fi
 
@@ -125,9 +123,9 @@ echo -e "
 echo -e "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- \n"
 
 echo -e "
-######################################################################################################
-#				Remove all the SNPs which have 0 bp position  			     #
-######################################################################################################
+###########################################################
+# 2a) Remove all the SNPs which have 0 bp position  	    #
+###########################################################
 "
 
 	awk 'int($4)==0' Data_liftedSNPs.bim|wc -l 
@@ -138,11 +136,11 @@ echo -e "
 
 	if [ $count -gt 0 ]
 	then
-	$PLINK --bfile Data_liftedSNPs --exclude Data_noSNP_coordinates.txt --make-bed --out Data_liftedSNPs_1
+		$PLINK --bfile Data_liftedSNPs --exclude Data_noSNP_coordinates.txt --make-bed --out Data_liftedSNPs_1
 	else
-	mv Data_liftedSNPs.fam Data_liftedSNPs_1.fam
-	mv Data_liftedSNPs.bim Data_liftedSNPs_1.bim
-	mv Data_liftedSNPs.bed Data_liftedSNPs_1.bed
+		mv Data_liftedSNPs.fam Data_liftedSNPs_1.fam
+		mv Data_liftedSNPs.bim Data_liftedSNPs_1.bim
+		mv Data_liftedSNPs.bed Data_liftedSNPs_1.bed
 	fi
 
 
@@ -153,9 +151,9 @@ echo -e 				"...........................$count SNPs were not mapped and were exc
 echo -e "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- \n"
 
 echo -e "
-######################################################################################################
-#  				Remove all the SNPs which are not annotated in hg19 		     #
-######################################################################################################
+#######################################################
+# 2b) Remove all SNPs which are not annotated in hg19 #
+#######################################################
 "
 
 	echo -e "Recheck missing hg19 annotations \n"
@@ -227,9 +225,9 @@ echo -e '
 		$PLINK --bfile Data_liftedSNPs_1 --exclude SNPs_notInHG19 --make-bed --out Data_lifted_hg19only
 		echo "$count SNPs have been removed from the main file \n"
 	else
-		cp  Data_liftedSNPs_1.fam Data_lifted_hg19only.fam
-		cp  Data_liftedSNPs_1.bim Data_lifted_hg19only.bim
-		cp  Data_liftedSNPs_1.bed Data_lifted_hg19only.bed
+		cp  Data_liftedSNPs_1.fam QC_autosomal.fam
+		cp  Data_liftedSNPs_1.bim QC_autosomal.bim
+		cp  Data_liftedSNPs_1.bed QC_autosomal.bed
 		echo -e "no SNPs have been removed all fine \n"
     
 	fi
@@ -243,63 +241,60 @@ echo -e "-----------------------------------------------------------------------
 	sort -k3n Data_lifted_hg19only.bim |  uniq  -f2 -D | cut -f2 > Duplicated_SNPs.txt
 
 
-	$PLINK --bfile Data_lifted_hg19only --exclude Duplicated_SNPs.txt --make-bed --out Data_lifted_hg19only_Uniq
-
-
-echo -e "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- \n"
-
-echo -e "
-######################################################################################################
-#  				Remove all the SNPs which are not annotated in hg19 		     #
-######################################################################################################
-"
-
-	if ExtractAffected=="Yes"
-	then
-		max=$(awk '{print $6}' Data_lifted_hg19only_Uniq.fam | awk '{if(min==""){min=max=$1}; if($1>max) {max=$1}; if($1<min) {min=$1}; total+=$1; count+=1} END {print total/count, max, min}'| awk -F ' ' '{print $2}')
-		min=$(awk '{print $6}' Data_lifted_hg19only_Uniq.fam | awk '{if(min==""){min=max=$1}; if($1>max) {max=$1}; if($1<min) {min=$1}; total+=$1; count+=1} END {print total/count, max, min}'| awk -F ' ' '{print $3}')
-		if [ ! "$min" -eq "$max" ] #If Plink fam file contains affected indiviudal statuses
-		then
-			threshold=2
-			echo -e "Select only the affected individuals"
-			awk -v threshold="$threshold" '$6 == threshold' Data_lifted_hg19only_Uniq.fam|awk '{print $1 "\t" $2}'> Affected_Data_liftedSNPs.txt
-			$PLINK --bfile Data_lifted_hg19only_Uniq --keep Affected_Data_liftedSNPs.txt --make-bed --out QC_affected
-
-	elif [ -e $AffectedInds ] #If there is already a list of affected individuals occuring
-	then
-		$PLINK --bfile Data_lifted_hg19only_Uniq --keep $AffectedInds --make-bed --out QC_affected
-
-	elif [ "$min" -eq "$max" ] && [ ! -e $AffectedInds ]
-	then
-		echo -e "Please provide a file with affected individuals only, with two columns consisting of FID and IID respectively otherwise imputation will be performed on all  individuals"
-
-	else
-		echo -e "Samples already only contain affected individuals \n"
-	    	cp  Data_lifted_hg19only_Uniq.fam QC_affected.fam
-	    	cp  Data_lifted_hg19only_Uniq.bim QC_affected.bim
-	    	cp  Data_lifted_hg19only_Uniq.bed QC_affected.bed
-		fi
-
-	else
-	echo -e "All individuals are selected for further analysis \n"
-	fi
+	$PLINK --bfile Data_lifted_hg19only --exclude Duplicated_SNPs.txt --make-bed --out QC_autosomal
 
 fi
 
 echo -e "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- \n"
 
-
 echo -e "
-#####################################################
-# 2) Stand Check 				    #
-#####################################################
+##########################################################
+# 3) Extract affected individuals if provided		   #
+##########################################################
 "
 
-if [ -e QC_autosomal.bim ]
+if [ $ExtractAffected=="Yes" ]
+then
+	max=$(awk '{print $6}' QC_autosomal.fam | awk '{if(min==""){min=max=$1}; if($1>max) {max=$1}; if($1<min) {min=$1}; total+=$1; count+=1} END {print total/count, max, min}'| awk -F ' ' '{print $2}')
+	min=$(awk '{print $6}' QC_autosomal.fam | awk '{if(min==""){min=max=$1}; if($1>max) {max=$1}; if($1<min) {min=$1}; total+=$1; count+=1} END {print total/count, max, min}'| awk -F ' ' '{print $3}')
+	if [ ! "$min" -eq "$max" ] #If Plink fam file contains affected indiviudal statuses
+	then
+		threshold=2
+		echo -e "Select only the affected individuals"
+		awk -v threshold="$threshold" '$6 == threshold' QC_autosomal.fam|awk '{print $1 "\t" $2}'> Affected_Data_liftedSNPs.txt
+		$PLINK --bfile QC_autosomal --keep Affected_Data_liftedSNPs.txt --make-bed --out QC_affected
+
+	elif [ -e $AffectedInds ] #If there is already a list of affected individuals occuring
+	then
+		$PLINK --bfile QC_autosomal --keep $AffectedInds --make-bed --out QC_affected
+
+	elif [ "$min" -eq "$max" ] && [ ! -e $AffectedInds ]
+	then
+		echo -e "Please provide a file with affected individuals only, with two columns consisting of FID and IID respectively otherwise all individuals will be selected for performing further analysis"
+	    	cp  QC_autosomal.fam QC_affected.fam
+	    	cp  QC_autosomal.bim QC_affected.bim
+	    	cp  QC_autosomal.bed QC_affected.bed
+	fi
+
+	else
+	echo -e "All individuals are selected for further analysis \n"
+fi
+
+
+echo -e "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- \n"
+
+
+echo -e "
+######################################################
+# 4) Stand Check 				       #
+######################################################
+"
+
+if [ -e QC_affected.bim ]
 then
 	for ((i=1;i<=22;i++))
 	do
-	$PLINK --bfile QC_autosomal --chr "$i" --make-bed --out Affected_Data_liftedSNPs"$i"
+	$PLINK --bfile QC_affected --chr "$i" --make-bed --out Affected_Data_liftedSNPs"$i"
 	done
 fi
 
@@ -307,7 +302,7 @@ fi
 
 
 echo -e '
-##################################### Performing Strand check #################################
+########### Performing Strand check ###################
 '
 
 START=$(date +%s)
@@ -360,7 +355,7 @@ do
 	mv Affected_Data_liftedSNPs"$i".bed Set1_Affected_Data_liftedSNPs"$i".bed
 	mv Affected_Data_liftedSNPs"$i".bim Set1_Affected_Data_liftedSNPs"$i".bim
 	mv Affected_Data_liftedSNPs"$i".fam Set1_Affected_Data_liftedSNPs"$i".fam
-fi
+	fi
 done
 wait
 
@@ -423,9 +418,9 @@ echo -e "Run the final strand check to see if there are still any complains"
 for ((i=1;i<=22;i++))
 do
 echo "
-###################################################
-#######################chr$i#######################
-###################################################
+#######################################################
+#######################chr$i###########################
+#######################################################
 
 "
 	if [[ -e Set2_Affected_Data_liftedSNPs"$i".bim ]]
@@ -433,9 +428,9 @@ echo "
 	$SHAPEIT -check \
         -B Set2_Affected_Data_liftedSNPs"$i" \
         -M $MapFile/genetic_map_chr"$i"_combined_b37.txt \
-        --input-ref $ShapeitRefHaps/ALL_1000G_phase1integrated_v3_chr"$i"_impute.hap.gz \
-	            $ShapeitRefHaps/ALL_1000G_phase1integrated_v3_chr"$i"_impute.legend \
-	            $ShapeitRefHaps/ALL_1000G_phase1integrated_v3.sample  \
+        --input-ref $ShapeitRefHaps/1000GP_Phase3/1000GP_Phase3_chr"$i".hap.gz \
+	            $ShapeitRefHaps/1000GP_Phase3/1000GP_Phase3_chr"$i".legend.gz \
+	            $ShapeitRefHaps/1000GP_Phase3/1000GP_Phase3.sample \
         --output-log gwas.alignments"$i" &
 	else
 	echo -e "Please check the existence of Set2_Affected_Data_liftedSNPs"$i" before proceeding \n"
@@ -494,7 +489,7 @@ wait
 
 echo -e "
 #####################################################
-#4) Prephasing					    #
+#5) Prephasing					      #
 #####################################################
 "
 
@@ -570,9 +565,9 @@ echo -e ".....................................................................Pr
 
 
 echo -e "
-######################################################################################
-# 5) Convert all the outputs to VCF format					     #
-######################################################################################
+#####################################################
+# 6) Convert all the outputs to VCF format	      #
+#####################################################
 "
 
 
@@ -596,9 +591,9 @@ cd OUTPUT_DIR/Stage2_GenoImpute
 echo -e ".....................................................................Preparing jobs for submitting to Minimac for Imputation \n................................................................."
 
 echo -e "
-#####################################################################################
-# 6) Run Minimac.py								    #	
-#####################################################################################
+######################################################
+# 7) Run Minimac.py				       #	
+######################################################
 "
 
 
@@ -632,21 +627,17 @@ echo -e '
 ######################################################
 '
 
-BLOCK
-echo after comment
+
 
 cd OUTPUT_DIR/Stage2_GenoImpute
 
 echo -e "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- \n"
 
 
-
-echo -e "............................................................... Find the SNPs which passed the QC threshold of imputation \n................................................................."
-
 echo -e "
-######################################################################################
-# 7) Find the SNPs which passed the QC threshold of imputation			     #
-######################################################################################
+######################################################
+#8)Find SNPs which passed QC threshold of imputation#
+######################################################
 "
 
 #Change the spacing
@@ -683,16 +674,32 @@ echo -e '
 ######################################################
 '
 
+echo -e 'Updating SNP names. VCF files contains SNP identifiers as ids combined with chr:snpid:ph.pos:bp:allele1_allele2'
 
-for((i=1;i<=22;i++))
-do
-	if [[ -e tmp"$i" ]]
-	then
+i=22
+Nr=$(cat tmp"$i"| awk -v FS='\t' '{print $1}'| head -2 | tail -n 1|grep -o ':'|wc -l)
+
+
+if [[ $Nr>1 ]]
+then
+	for((i=1;i<=22;i++))
+	do
+		if [[ -e tmp"$i" ]]
+		then
+		awk '{print $1}' tmp"$i" | cut -f1,2 -d':' > SNPnames$i
+		paste tmp"$i" SNPnames"$i"|awk '{print $14 "\t" $2 "\t" $3 "\t" $4 "\t" $5 "\t" $6 "\t" $7 "\t" $8 "\t" $9 "\t" $10 "\t" $11 "\t" $12 "\t" $13}'>testset"$i"
+		awk '{if ($1 ~ /rs/) {a=sub(/\:.*$/,"",$1); print $0;} else {print $0}}' testset"$i">testset2"$i"
+		grep -E "^[0-9]|^rs"  testset2"$i" > Chr"$i"_StudyImputed.txt &
+		else
+		echo -e "WARNING!!!! No tmp file exists for Chromosome "$i" , please check if there was any error reported before proceeding forward \n"
+		fi
+	done
+else
+	for((i=1;i<=22;i++))
+	do
 	grep -E "^[0-9]|^rs"  tmp"$i" > Chr"$i"_StudyImputed.txt &
-	else
-	echo -e "WARNING!!!! No tmp file exists for Chromosome "$i" , please check if there was any error reported before proceeding forward \n"
-	fi
-done
+	done
+fi
 wait
 
 
@@ -709,11 +716,42 @@ for((i=1;i<=22;i++))
 do
 	if [[ -e Gwas.Chr"$i"_Study.Imputed.Output.dose.vcf.gz ]]
 	then
-	/home/afsheenyousaf/Downloads/plink_linux_x86_64/plink --vcf Gwas.Chr"$i"_Study.Imputed.Output.dose.vcf.gz --chr "$i" --make-bed --out Chr"$i"_Data_Imputed_plinkables &
+	$PLINK --vcf Gwas.Chr"$i"_Study.Imputed.Output.dose.vcf.gz --chr "$i" --make-bed --out Chr"$i"_Data_Imputed_plinkables &
+	else
 	echo -e "WARNING!!!! No vcf file exists for Chromosome "$i" , please check if there was any error reported before proceeding forward \n"
 	fi
 done
 wait
+
+
+
+
+#VCF files contains SNP identifiers as ids combined with chr:snpid:ph.pos:bp:allele1_allele2, this needs to be separated by the following commands
+
+Nr=$(cat Chr"$i"_Data_Imputed_plinkables.bim| awk -v FS='\t' '{print $2}'| head -2 | tail -n 1|grep -o ':'|wc -l)
+
+if [[ $Nr>1 ]]
+then
+#Removing everything after second colon (works)
+	for((i=1;i<=22;i++))
+	do
+	awk '{print $2}' Chr"$i"_Data_Imputed_plinkables.bim | cut -f1,2 -d':' > SNPnames$i
+	done
+
+
+# combining files
+	paste Chr"$i"_Data_Imputed_plinkables.bim SNPnames"$i"|awk '{print $1 "\t" $7 "\t" $3 "\t" $4 "\t" $5 "\t" $6}'>testset"$i"
+
+	awk '{if ($2 ~ /rs/) {a=sub(/\:.*$/,"",$2); print $0;} else {print $0}}' testset"$i">Chr"$i"_Data_Imputed_plinkables2.bim
+	mv Chr"$i"_Data_Imputed_plinkables.bed Chr"$i"_Data_Imputed_plinkables2.bed
+	mv Chr"$i"_Data_Imputed_plinkables.fam Chr"$i"_Data_Imputed_plinkables2.fam
+else
+	mv Chr"$i"_Data_Imputed_plinkables.bed Chr"$i"_Data_Imputed_plinkables2.bed
+	mv Chr"$i"_Data_Imputed_plinkables.fam Chr"$i"_Data_Imputed_plinkables2.fam
+	mv Chr"$i"_Data_Imputed_plinkables.bim Chr"$i"_Data_Imputed_plinkables2.bim
+fi
+
+
 
 chmod 770*
 
@@ -729,51 +767,22 @@ for((i=1;i<=22;i++))
 do
 	if [[ -e Chr"$i"_StudyImputed.txt ]]
 	then
-	/home/afsheenyousaf/Downloads/plink_linux_x86_64/plink --bfile Chr"$i"_Data_Imputed_plinkables --biallelic-only strict --extract Chr"$i"_StudyImputed.txt --make-bed --out Chr"$i"_Data_Imputed_biallelic_Filtered &
+	$PLINK --bfile Chr"$i"_Data_Imputed_plinkables2 --biallelic-only strict --extract Chr"$i"_StudyImputed.txt --make-bed --out Chr"$i"_Data_Imputed_biallelic_Filtered &
 	else
 	echo -e "WARNING!!!! No Imputed file exists for Chromosome "$i" , please check if there was any error reported before proceeding forward \n"
 	fi
 done
 wait
 
+
 echo -e '
 ######################################################
 '
 
-echo -e "make selection list \n"
-
-for((i=1;i<=22;i++))
-do
-	if [[ -e Chr"$i"_Data_Imputed_biallelic_Filtered.bim ]]
-	then
-	awk '$1 ~ /\:/' Chr"$i"_Data_Imputed_biallelic_Filtered.bim>FilesAnn"$i"
-	awk '$1 !~ /\:/' Chr"$i"_Data_Imputed_biallelic_Filtered.bim>FilesNotAnn"$i"
-		if [[ $(wc -l FilesNotAnn"$i") == 0 ]]
-		then
-		echo -e "Files for Chromosome "$i" are in the correct format \n"
-		else
-		sed s/":"/"\t"/g FilesNotAnn"$i" | awk '$2 ~/^rs/ {print $1"\t"$2"\t"$6"\t"$7"\t"$8"\t"$9} $2 ~/^[0-9]/ {print $1"\t"$2":"$3"\t"$6"\t"$7"\t"$8"\t"$9}' > tmp"$i"
-			if [[ -e FilesAnn"$i" ]]
-			then
-			cat tmp"$i" FilesAnn"$i">tmpFinal"$i"
-			rm tmp"$i"
-			mv tmpFinal"$i" Chr"$i"_Data_Imputed_biallelic_Filtered.bim
-			else
-			FilesNotAnn"$i">Chr"$i"_Data_Imputed_biallelic_Filtered.bim
-			fi
-		fi
-fi
-wait
-
-done
-wait
-
-echo -e "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- \n"
-
 echo -e "
-######################################################################################
-# 8) Convert all the output SNPs "bp:chr" to snps names				     #
-######################################################################################
+#######################################################
+# 9)Convert all the output SNPs "bp:chr" to snps names#
+#######################################################
 "
 #We used the latest build of the time when MAGNET was written i.e dbSNP 151 ( 09-Dec-2018)
 
@@ -832,16 +841,16 @@ echo -e "-----------------------------------------------------------------------
 
 
 echo -e '
-######################################################################################
-# 9) Perform QC of imputed SNPs							     #
-######################################################################################
+##########################################################
+#10) Perform QC of imputed SNPs			   #
+##########################################################
 '
 
 for ((i=1;i<=22;i++)); 
 do
 	if [[ -e Chr"$i"_Data_Imputed_biallelic_Filtered.bim ]]
 	then
-	/home/afsheenyousaf/Downloads/plink_linux_x86_64/plink --bfile Chr"$i"_Data_Imputed_biallelic_Filtered  --geno $GENO  --hwe $HWE --maf $MAF --make-bed --out tmp2"$i"
+	$PLINK --bfile Chr"$i"_Data_Imputed_biallelic_Filtered  --geno $GENO  --hwe $HWE --maf $MAF --make-bed --out tmp2"$i"
 	else
 	echo -e "Please check the existence of Chr"$i"_Data_Imputed_biallelic_Filtered.bim before proceeding \n"
 	sleep 2
@@ -857,7 +866,7 @@ for ((i=1;i<=22;i++));
 do
 	if [[ -e tmp2"$i".bim ]]
 	then
-	/home/afsheenyousaf/Downloads/plink_linux_x86_64/plink --bfile tmp2"$i" --mind $MIND --make-bed --out Final_Imputed"$i" >> ../../LOG/Stage1_GenoQC/plinkoutput_QC1_Chr"$i".log &
+	$PLINK --bfile tmp2"$i" --mind $MIND --make-bed --out Final_Imputed"$i" >> ../../LOG/Stage1_GenoQC/plinkoutput_QC1_Chr"$i".log &
 	else
 	echo -e "Please check the existence of tmp2"$i".bim before proceeding \n"
 	sleep 2
@@ -889,15 +898,12 @@ ls -1v Final_Imputed*.fam>c
 paste a b c>listForMergeSNPs_plink.txt
 
 
-
-echo -e "------------------------------------------------------------------------------------------------------------------------- \n"
-
 echo -e "-----------------------------------------------------Merge All the Chromosome SNPs--------------------------------------- \n"
 
 echo -e '
-######################################################################################
-# 10) Merge All the Chromosome SNPs						     #
-######################################################################################
+#########################################################
+# 11) Merge All the Chromosome SNPs			  #
+#########################################################
 '
 
 if [[ -e listForMergeSNPs_plink.txt ]]
@@ -913,7 +919,7 @@ echo -e '
 
 sed '1d' listForMergeSNPs_plink.txt>SNPsToMerge.txt
 
-/home/afsheenyousaf/Downloads/plink_linux_x86_64/plink --bfile $PlinkFinal --merge-list SNPsToMerge.txt --out Merged_Imputed_FinalQC_SNPs_Data
+$PLINK --bfile $PlinkFinal --merge-list SNPsToMerge.txt --out Merged_Imputed_FinalQC_SNPs_Data
 
 echo -e "If merging not successful exclude any 3+ alleles \n"
 
@@ -921,7 +927,7 @@ if [[ -e Merged_Imputed_FinalQC_SNPs_Data.missnp ]]
 then
 	for ((i=1;i<=22;i++)); 
 	do
-	/home/afsheenyousaf/Downloads/plink_linux_x86_64/plink --bfile Final_Imputed"$i" --exclude Merged_Imputed_FinalQC_SNPs_Data.missnp --make-bed --out tmp_chr"$i" &
+	$PLINK --bfile Final_Imputed"$i" --exclude Merged_Imputed_FinalQC_SNPs_Data.missnp --make-bed --out tmp_chr"$i" &
 	done
 	wait
 
@@ -950,14 +956,13 @@ echo -e '
 
 #Merge them again 
 
-	/home/afsheenyousaf/Downloads/plink_linux_x86_64/plink --bfile $PlinkFinal --merge-list SNPsToMerge.txt --out Merged_FinalQC_SNPs_Data
+	$PLINK --bfile $PlinkFinal --merge-list SNPsToMerge.txt --out Merged_FinalQC_SNPs_Data
 
 
 else
-
-    mv Merged_Imputed_FinalQC_SNPs_Data.bim Merged_FinalQC_SNPs_Data.bim
-    mv Merged_Imputed_FinalQC_SNPs_Data.bed Merged_FinalQC_SNPs_Data.bed
-    mv Merged_Imputed_FinalQC_SNPs_Data.fam Merged_FinalQC_SNPs_Data.fam
+	mv Merged_Imputed_FinalQC_SNPs_Data.bim Merged_FinalQC_SNPs_Data.bim
+	mv Merged_Imputed_FinalQC_SNPs_Data.bed Merged_FinalQC_SNPs_Data.bed
+	mv Merged_Imputed_FinalQC_SNPs_Data.fam Merged_FinalQC_SNPs_Data.fam
 
 fi
 
@@ -969,18 +974,19 @@ wc -l Merged_FinalQC_SNPs_Data.bim
 
 if [[ -e Merged_FinalQC_SNPs_Data.bim ]]
 then
-echo -e "--------------For further analysis we need to split snp file into chunks of 5000 and report the minor allele frequency of the SNPS--------------\n"
+	echo -e "--------------For further analysis we need to split snp file into chunks of 5000 and report the minor allele frequency of the SNPS--------------\n"
 else
-echo "Imputation did not run successfully please check back the log files"
+	echo "Imputation did not run successfully please check back the log files"
 fi
 
 echo -e '
 ######################################################
 '
 echo -e '
-######################################################################################
-# 11) Split into chunks of 5000 and Find the minor allele frequency of the SNPS	     #
-######################################################################################
+######################################################
+# 12) Split into chunks of 5000,		       #
+# Find the minor allele frequency of the SNPS	       #
+######################################################
 '
 
 
@@ -1013,7 +1019,7 @@ do
 echo ${Files[i]}
 	if [[ -e ${Files[i]} ]]
 	then
-	/home/afsheenyousaf/Downloads/plink_linux_x86_64/plink --bfile Merged_FinalQC_SNPs_Data --extract ${Files[i]} --make-bed --out tmp"$i"
+	$PLINK --bfile Merged_FinalQC_SNPs_Data --extract ${Files[i]} --make-bed --out tmp"$i"
 	fi
 wait
 done
@@ -1023,7 +1029,7 @@ do
 	if [[ -e tmp"$i".bim ]]
 	then
 	echo ${Files[i]}
-	/home/afsheenyousaf/Downloads/plink_linux_x86_64/plink --bfile tmp"$i" --recodeA --out Data_SNPfile"$i" 
+	$PLINK --bfile tmp"$i" --recodeA --out Data_SNPfile"$i" 
 	rm tmp"$i"
 	fi
 done
