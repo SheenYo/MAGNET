@@ -7,19 +7,20 @@ packagesCRAN=c("lme4", "readxl")
 pkgTest <- function(x)
   {
     if (!require(x,character.only = TRUE))
-    { dir.create("./tmpRlib", showWarnings=F)
-      install.packages(x,dep=TRUE, lib="./tmpRlib", repos="http://cloud.r-project.org")
-        if(!require(x,character.only = TRUE)) stop("Package not found")
+    { #dir.create("./tmpRlib", showWarnings=F)
+      ifelse(!dir.exists(file.path("../../tmpRlib")), dir.create(file.path("./tmpRlib")), FALSE)
+      install.packages(x,dep=TRUE, lib="../../tmpRlib",INSTALL_opts = c('--no-lock'), repos="http://cloud.r-project.org")
+        #if(!require(x,character.only = TRUE)) stop("Package not found")
     }
   }
 
 pkgTestBioC <- function(x)
   {
     if (!require(x,character.only = TRUE))
-    { dir.create("./tmpRlib", showWarnings=F)
+    { dir.create("../../tmpRlib", showWarnings=F)
         source("https://bioconductor.org/biocLite.R")
-        biocLite(x, lib="./tmpRlib", dependencies=T, update="n")
-        if(!require(x,character.only = TRUE)) stop("Package not found")
+        biocLite(x, lib="../../tmpRlib", dependencies=T, update="n")
+        #if(!require(x,character.only = TRUE)) stop("Package not found")
     }
   }
 
@@ -28,6 +29,8 @@ if(length(packagesCRAN)>0) { sapply(packagesCRAN, pkgTest) }
 if(length(packagesBioC)>0) { sapply(packagesBioC, pkgTestBioC) }
 
 
+require("lme4",lib.loc="../../tmpRlib")
+require("readxl",lib.loc="../../tmpRlib")
 
 options(echo=TRUE, stringsAsFactors = F) # if you want see commands in output file
 
@@ -35,9 +38,9 @@ args <- commandArgs(trailingOnly = TRUE)
 
 print (args)
 
-if (length(args)!=6){
+if (length(args)!=7){
   cat("not all options are provided \n")
-  cat("arg 1= Rawdatafile 2=Phenofile 3=ColNamePhenoToTest 4=Covariates 5=fixedEffects[none] 6=Outputname\n")
+  cat("arg 1= Rawdatafile 2=Phenofile 3=ColNamePhenoToTest 4=Covariates 5=fixedEffects[none] 6=Outputname 7=Phenotype Status\n")
   stop()
   
 }
@@ -62,8 +65,10 @@ head(Phenofile)
 Geno_Pheno<-merge(Phenofile,rawdata,by.x ="ID_Genetik", by.y="IID")
 dim(Geno_Pheno)
 
+Status<-table(Geno_Pheno$PHENOTYPE)
 
-Geno_Pheno_Phenotype<-subset(Geno_Pheno,Geno_Pheno$PHENOTYPE==-9) 
+
+Geno_Pheno_Phenotype<-subset(Geno_Pheno,Geno_Pheno$PHENOTYPE==args[7]) 
 
 dim(Geno_Pheno_Phenotype)
 
