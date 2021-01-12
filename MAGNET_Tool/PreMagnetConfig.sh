@@ -272,8 +272,8 @@ echo -e "...Checking for the Program MAGMA, if doesn't exist then it will be dow
 	#Change to magma main directory
 	cd $MAGNET/MAIN_DIR/magma
 	#Download magma
-	wget https://ctg.cncr.nl/software/MAGMA/prog/magma_v1.07bb.zip --no-check-certificate
-	unzip magma_v1.07bb.zip
+	wget https://ctg.cncr.nl/software/MAGMA/prog/magma_v1.08b.zip --no-check-certificate
+	unzip magma_v1.08b.zip
 	chmod +xr $MAGNET/MAIN_DIR/magma/magma
 	$MAGNET/MAIN_DIR/magma/magma > $MAGNET/LOG/magma.log 2>&1 
 	testp='$MAGNET/MAIN_DIR/magma/magma | grep -i 'magma''
